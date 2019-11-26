@@ -34,10 +34,10 @@ SET(MYSOURCE
     OSGWidget.cpp
     BouncyBall.h
     BouncyBall.cpp  
-    ground.h
-    ground.cpp
     obstacleboxes.cpp
     obstacleboxes.h
+    boundingbox.cpp
+    boundingbox.h
     )
 add_executable(${PROJECT_NAME}
     ${MYSOURCE}

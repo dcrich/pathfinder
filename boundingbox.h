@@ -1,33 +1,22 @@
-//-------------------------------------------------------
-// Filename: Ground.h
-//
-// Description:  The h file for the qt5 bullet bouncy ball example.
-//
-// Creator:  Professor Corey McBride for MEEN 570 - Brigham Young University
-//
-// Creation Date: 11/7/18
-//
-// Owner: Corey McBride
-//-------------------------------------------------------
-
-#ifndef GROUND_H
-#define GROUND_H
+#ifndef BOUNDINGBOX_H
+#define BOUNDINGBOX_H
 #include <QMatrix4x4>
 #include "btBulletDynamicsCommon.h"
 #include <osg/MatrixTransform>
 #include <osg/ShapeDrawable>
 
-class Ground
+class boundingBox
 {
 public:
-    Ground();
-    Ground(int size,QVector4D& color);
+    boundingBox(float size,QVector4D& color);
     btRigidBody* getRigidBodyPtr() {return mRigidBody;}
     osg::Node* getNode() {return mTransform.release();}
+    void create_sides_xz(btVector3 positionPhysics);
+    void create_sides_yz(btVector3 positionPhysics);
 
-    void draw(QMatrix4x4 &V_matrix, QMatrix4x4 &P_matrix);
+
 private:
-    double mSize;
+    float mSize;
     btCollisionShape* mGroundShape;
     btDefaultMotionState* mGroundMotionState;
     btRigidBody* mRigidBody;
@@ -36,13 +25,25 @@ private:
     QMatrix4x4  M;
     btTransform trans;
     QVector4D mColor;
+    osg::Geode* geode;
+    osg::Geode* bgeode;
+    float baseCenter;
+    btVector3 topPosition;
+    btVector3 sidePositionYZ1;
+    btVector3 sidePositionYZ2;
+    btVector3 sidePositionXZ1;
+    btVector3 sidePositionXZ2;
+    btVector3 bottomPosition;
 
-    void create();
+
+
+    void create_sides_xy(btVector3 positionPhysics);
     void destroy();
     void create_mesh();
+    void make_boundary_box(float mSize);
 
     osg::ref_ptr<osg::MatrixTransform> mTransform;
     osg::ref_ptr<osg::Box> mOSGBox;
 };
 
-#endif // GROUND_H
+#endif // BOUNDINGBOX_H

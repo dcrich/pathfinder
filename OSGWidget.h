@@ -5,7 +5,6 @@
 #include <QOpenGLWidget>
 #include "btBulletDynamicsCommon.h"
 #include "BouncyBall.h"
-#include "ground.h"
 #include <osgGA/TrackballManipulator>
 #include <osgGA/NodeTrackerManipulator>
 
@@ -14,6 +13,7 @@
 #include <osgViewer/GraphicsWindow>
 #include <osgViewer/CompositeViewer>
 #include "obstacleboxes.h"
+#include "boundingbox.h"
 
 
 class OSGWidget : public QOpenGLWidget
@@ -74,7 +74,7 @@ private:
   bool mStarted;
   int mTimerId{0};
 
-  Ground* mGround;
+  boundingBox* mGround;
   obstacleBoxes * mObstacleBox;
   BouncyBall* mBouncyBall;
   void initPhysics();

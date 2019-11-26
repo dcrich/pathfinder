@@ -154,12 +154,18 @@ void OSGWidget::setup_single_ball()
     QVector4D ground_color(.5,0.0,.5,1);
     
     // This creates and adds the ground to the world.
-    mGround= new Ground(1000,ground_color);
+    mGround= new boundingBox(1000,ground_color);
     mRoot->addChild(mGround->getNode());
     mDynamicsWorld->addRigidBody(mGround->getRigidBodyPtr());
+//    while(mGround->)
+//    {
+//        osg::Node* child=mRoot->getChild(0);
+//        mRoot->removeChild(child);
+
+//    }
     
     
-    pos=QVector3D(100,100,800); // starting position of ball
+    pos=QVector3D(500,500,800); // starting position of ball
     color =QVector4D(1,1,1,1);
     mBouncyBall=new BouncyBall(pos, color, 100, 100);
     //    mNodeTracker = new osgGA::NodeTrackerManipulator;
@@ -183,7 +189,7 @@ void OSGWidget::make_balls()
 {
     QVector3D pos;
     QVector4D color;
-    pos=QVector3D(100,100,800); // starting position of ball
+    pos=QVector3D(500,500,800); // starting position of ball
     color =QVector4D(1,1,1,1);
     mBouncyBall=new BouncyBall(pos, color, 100, 10);
 
@@ -221,7 +227,7 @@ void OSGWidget::reset_world()
         initPhysics();
     }
     QVector4D ground_color(.5,0.0,.5,1);
-    mGround= new Ground(1000,ground_color);
+    mGround= new boundingBox(1000,ground_color);
     mRoot->addChild(mGround->getNode());
     mDynamicsWorld->addRigidBody(mGround->getRigidBodyPtr());
     
@@ -230,7 +236,7 @@ void OSGWidget::create_obstacles(int numberOfObstacles, int sizeOfObstacles)
 {
     std::random_device rd;
     std::mt19937 generator(rd());
-    std::uniform_real_distribution<float> dis(0,400);
+    std::uniform_real_distribution<float> dis(0,1000);
     for (int i{0}; i<numberOfObstacles; i++)
     {
         float x = dis(generator);

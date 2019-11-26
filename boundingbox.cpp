@@ -12,21 +12,6 @@ boundingBox::boundingBox(float size, QVector4D& color)
     baseCenter=mSize*.5f;
     mColor=color;
 
-//    topPosition = {mSize*.5f,mSize*.5f,mSize};
-//    create_sides_xy(topPosition);
-
-//    sidePositionXZ1 = {mSize*.5f,0.f,mSize*.5f};
-//    create_sides_xz(sidePositionXZ1);
-
-//    sidePositionXZ2 = {mSize*.5f,mSize,mSize*.5f};
-//    create_sides_xz(sidePositionXZ2);
-
-//    sidePositionYZ1 = {0.f,mSize*.5f,mSize*.5f};
-//    create_sides_yz(sidePositionYZ1);
-
-//    sidePositionYZ2 = {mSize,mSize*.5f,mSize*.5f};
-//    create_sides_yz(sidePositionYZ2);
-
     bottomPosition = {mSize*.5f,mSize*.5f,0};
     create_sides_xy(bottomPosition);
 

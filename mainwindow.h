@@ -1,14 +1,3 @@
-//-------------------------------------------------------
-// Filename: mainwindow.cpp
-//
-// Description:  The cpp file for the qt5 bullet bouncy ball example.
-//
-// Creator:  Professor Corey McBride for MEEN 570 - Brigham Young University
-//
-// Creation Date: 11/7/18
-//
-// Owner: Corey McBride
-//-------------------------------------------------------
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 

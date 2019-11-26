@@ -147,24 +147,9 @@ void OSGWidget::stop_timer()
 
 void OSGWidget::setup_single_ball()
 {
-
+    make_ground();
     QVector3D pos;
     QVector4D color;
-    
-    QVector4D ground_color(.5,0.0,.5,1);
-    
-    // This creates and adds the ground to the world.
-    mGround= new boundingBox(1000,ground_color);
-    mRoot->addChild(mGround->getNode());
-    mDynamicsWorld->addRigidBody(mGround->getRigidBodyPtr());
-//    while(mGround->)
-//    {
-//        osg::Node* child=mRoot->getChild(0);
-//        mRoot->removeChild(child);
-
-//    }
-    
-    
     pos=QVector3D(500,500,800); // starting position of ball
     color =QVector4D(1,1,1,1);
     mBouncyBall=new BouncyBall(pos, color, 100, 100);
@@ -174,6 +159,7 @@ void OSGWidget::setup_single_ball()
     //    mViewer->addView( view );
     //    mViewer->setThreadingModel( osgViewer::CompositeViewer::SingleThreaded );
     //    mViewer->realize();
+
     // Here, we ask the ball for its btRigidBody*,
     // which is added into the world, free to interact with
     // everything else in the world.
@@ -226,17 +212,14 @@ void OSGWidget::reset_world()
         mGround = nullptr;
         initPhysics();
     }
-    QVector4D ground_color(.5,0.0,.5,1);
-    mGround= new boundingBox(1000,ground_color);
-    mRoot->addChild(mGround->getNode());
-    mDynamicsWorld->addRigidBody(mGround->getRigidBodyPtr());
+    make_ground();
     
 }
 void OSGWidget::create_obstacles(int numberOfObstacles, int sizeOfObstacles)
 {
     std::random_device rd;
     std::mt19937 generator(rd());
-    std::uniform_real_distribution<float> dis(0,1000);
+    std::uniform_real_distribution<float> dis(0,mSizeGround);
     for (int i{0}; i<numberOfObstacles; i++)
     {
         float x = dis(generator);
@@ -252,11 +235,11 @@ void OSGWidget::create_obstacles(int numberOfObstacles, int sizeOfObstacles)
         mRoot->addChild(mObstacleBox->getNode());
 
     }
-//    std::vector<float> obstacleSize{400.f,400.f,400.f};
-//    std::vector<float> obstaclePosition{0.f,0.f,0.f};
-//    mObstacleBox= new obstacleBoxes(obstacleSize, obstaclePosition);
-//    mRoot->addChild(mObstacleBox->getNode());
-//    mDynamicsWorld->addRigidBody(mObstacleBox->getRigidBodyPtr());
+    //    std::vector<float> obstacleSize{400.f,400.f,400.f};
+    //    std::vector<float> obstaclePosition{0.f,0.f,0.f};
+    //    mObstacleBox= new obstacleBoxes(obstacleSize, obstaclePosition);
+    //    mRoot->addChild(mObstacleBox->getNode());
+    //    mDynamicsWorld->addRigidBody(mObstacleBox->getRigidBodyPtr());
 
 
 }
@@ -306,7 +289,34 @@ void OSGWidget::keyReleaseEvent( QKeyEvent* event )
     this->getEventQueue()->keyRelease( osgGA::GUIEventAdapter::KeySymbol( *keyData ) );
 }
 
+void OSGWidget::make_ground()
+{
+    QVector4D ground_color(.5,0.0,.5,1);
 
+    mGround= new boundingBox(mSizeGround,ground_color);
+    mRoot->addChild(mGround->getNode());
+    mDynamicsWorld->addRigidBody(mGround->getRigidBodyPtr());
+
+    btVector3 sidePositionXZ1 = {mSizeGround*.5f,0.f,mSizeGround*.5f};
+    mGround->create_sides_xz(sidePositionXZ1);
+    mRoot->addChild(mGround->getNode());
+    mDynamicsWorld->addRigidBody(mGround->getRigidBodyPtr());
+
+    btVector3 sidePositionXZ2 = {mSizeGround*.5f,mSizeGround,mSizeGround*.5f};
+    mGround->create_sides_xz(sidePositionXZ2);
+    mRoot->addChild(mGround->getNode());
+    mDynamicsWorld->addRigidBody(mGround->getRigidBodyPtr());
+
+    btVector3 sidePositionYZ1 = {0.f,mSizeGround*.5f,mSizeGround*.5f};
+    mGround->create_sides_yz(sidePositionYZ1);
+    mRoot->addChild(mGround->getNode());
+    mDynamicsWorld->addRigidBody(mGround->getRigidBodyPtr());
+
+    btVector3 sidePositionYZ2 = {mSizeGround,mSizeGround*.5f,mSizeGround*.5f};
+    mGround->create_sides_yz(sidePositionYZ2);
+    mRoot->addChild(mGround->getNode());
+    mDynamicsWorld->addRigidBody(mGround->getRigidBodyPtr());
+}
 
 
 

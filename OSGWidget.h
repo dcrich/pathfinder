@@ -31,6 +31,7 @@ public:
   void reset_world();
   void make_balls();
   void create_obstacles(int numberOfObstacles, int sizeOfObstacles);
+  void make_ground();
 
 protected:
   virtual void paintEvent( QPaintEvent* paintEvent );
@@ -75,6 +76,7 @@ private:
   int mTimerId{0};
 
   boundingBox* mGround;
+  float mSizeGround{1000};
   obstacleBoxes * mObstacleBox;
   BouncyBall* mBouncyBall;
   void initPhysics();

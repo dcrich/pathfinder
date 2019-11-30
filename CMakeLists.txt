@@ -38,6 +38,8 @@ SET(MYSOURCE
     obstacleboxes.h
     boundingbox.cpp
     boundingbox.h
+    thevehicle.cpp
+    thevehicle.h
     )
 add_executable(${PROJECT_NAME}
     ${MYSOURCE}

@@ -68,7 +68,7 @@ void BouncyBall::create()
 
 
 
-    mOSGSphere   = new osg::Sphere( osg::Vec3( 0.f, 0.f, 0.f ), mRadius );
+    mOSGSphere   = new osg::Cylinder( osg::Vec3( 0.f, 0.f, 0.f ), mRadius, 10 );
     osg::ShapeDrawable* sd = new osg::ShapeDrawable( mOSGSphere );
     sd->setColor(  osg::Vec4(mColor[0], mColor[1], mColor[2],mColor[3]));
     sd->setName( "Sphere" );
@@ -91,9 +91,17 @@ void BouncyBall::create()
     mTransform->addChild(geode);
 }
 
+void BouncyBall::set_velocity(btVector3 velocityIncrease)
+{
+    btVector3 currentVelocity = rigidBody->getLinearVelocity();
+    btVector3 newVelocity = currentVelocity + velocityIncrease;
+    rigidBody->setLinearVelocity(newVelocity);
+}
+
 void BouncyBall::destroy()
 {
     delete rigidBody->getMotionState();
+
     delete rigidBody;
     delete mSphereShape;
 

@@ -27,11 +27,12 @@ public:
   virtual ~OSGWidget();
   void start_timer();
   void stop_timer();
-  void setup_single_ball();
+  void setup_environment();
   void reset_world();
   void make_balls();
   void create_obstacles(int numberOfObstacles, int sizeOfObstacles);
   void make_ground();
+  void arrow_key_velocity_update(int arrowDirection);
 
 protected:
   virtual void paintEvent( QPaintEvent* paintEvent );
@@ -79,7 +80,7 @@ private:
   float mSizeGround{1000};
   obstacleBoxes * mObstacleBox;
   BouncyBall* mBouncyBall;
-  void initPhysics();
+  void set_up_physics();
   void createWorld();
   osg::ref_ptr<osg::Group> mRoot;
   osg::Timer_t mStartTick;

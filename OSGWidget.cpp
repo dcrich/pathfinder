@@ -38,20 +38,20 @@ OSGWidget::OSGWidget( QWidget* parent,
     , mViewer( new osgViewer::CompositeViewer )
     , mBusy{false}
 {
-    initPhysics();
+    set_up_physics();
     mStarted=false;
     
     
     mRoot = new osg::Group;
     
-    float aspectRatio = static_cast<float>( this->width() ) / static_cast<float>( this->height() );
+    double aspectRatio = static_cast<double>( this->width() ) / static_cast<double>( this->height() );
     auto pixelRatio   = this->devicePixelRatio();
     
     camera = new osg::Camera;
     camera->setViewport( 0, 0, this->width() * pixelRatio, this->height() * pixelRatio );
     
     camera->setClearColor( osg::Vec4( 0.6f, 0.6f, 0.6f, 1.f ) );
-    camera->setProjectionMatrixAsPerspective( 30.f, aspectRatio, 1.f, 1000.f );
+    camera->setProjectionMatrixAsPerspective( 30., aspectRatio, 1., 1000. );
     camera->setGraphicsContext( mGraphicsWindow );
     
     view = new osgViewer::View;
@@ -63,7 +63,7 @@ OSGWidget::OSGWidget( QWidget* parent,
     mManipulator->setAllowThrow( false );
     
     view->setCameraManipulator( mManipulator );
-    mManipulator->setHomePosition(osg::Vec3d(7000,0,500),osg::Vec3d(0,0,0),osg::Vec3d(0,0,1));
+    mManipulator->setHomePosition(osg::Vec3d(3000,1500,1900),osg::Vec3d(0,0,0),osg::Vec3d(0,0,1));
     
     
     
@@ -96,7 +96,7 @@ OSGWidget::~OSGWidget()
 {
 }
 
-void OSGWidget::initPhysics()
+void OSGWidget::set_up_physics()
 {
     // The BulletWidget owns and controls everything to do with
     // the dynamics world. This call allocates the solvers
@@ -113,6 +113,28 @@ void OSGWidget::initPhysics()
     mTimeStep = 1/60.0;
     
     
+}
+
+void OSGWidget::arrow_key_velocity_update(int arrowDirection)
+{
+    btVector3 velocityIncrease;
+    if (arrowDirection == 1)
+    {
+        velocityIncrease = btVector3(0,100,0);
+    }
+    if (arrowDirection == 2)
+    {
+        velocityIncrease = btVector3(0,-100,0);
+    }
+    if (arrowDirection == 3)
+    {
+        velocityIncrease = btVector3(100,0,0);
+    }
+    if (arrowDirection == 4)
+    {
+        velocityIncrease = btVector3(-100,0,0);
+    }
+    mBouncyBall->set_velocity(velocityIncrease);
 }
 
 void OSGWidget::paintEvent( QPaintEvent* /* paintEvent */ )
@@ -132,7 +154,7 @@ void OSGWidget::start_timer()
 {
     mStarted=true;
     // And, start the timer.
-    mTimerId=startTimer(mTimeStep * 1000.0);
+    mTimerId=startTimer(static_cast<int>(mTimeStep) * 1000);
 }
 
 void OSGWidget::stop_timer()
@@ -145,25 +167,14 @@ void OSGWidget::stop_timer()
     }
 }
 
-void OSGWidget::setup_single_ball()
+void OSGWidget::setup_environment()
 {
     make_ground();
     QVector3D pos;
     QVector4D color;
-    pos=QVector3D(500,500,800); // starting position of ball
+    pos=QVector3D(10,10,10); // starting position of ball
     color =QVector4D(1,1,1,1);
     mBouncyBall=new BouncyBall(pos, color, 100, 100);
-    //    mNodeTracker = new osgGA::NodeTrackerManipulator;
-    //    mNodeTracker->setNode(mBouncyBall->getNode());
-    //    view->setCameraManipulator(mNodeTracker);
-    //    mViewer->addView( view );
-    //    mViewer->setThreadingModel( osgViewer::CompositeViewer::SingleThreaded );
-    //    mViewer->realize();
-
-    // Here, we ask the ball for its btRigidBody*,
-    // which is added into the world, free to interact with
-    // everything else in the world.
-    
     mDynamicsWorld->addRigidBody(mBouncyBall->getRigidBodyPtr());
     mRoot->addChild(mBouncyBall->getNode());
     
@@ -210,7 +221,7 @@ void OSGWidget::reset_world()
         
         delete mGround;
         mGround = nullptr;
-        initPhysics();
+        set_up_physics();
     }
     make_ground();
     
@@ -224,7 +235,7 @@ void OSGWidget::create_obstacles(int numberOfObstacles, int sizeOfObstacles)
     {
         float x = dis(generator);
         float y = dis(generator);
-        float z = dis(generator);
+        float z = 0.f;
         float sizeX = dis(generator)*0.1f*sizeOfObstacles;
         float sizeY = dis(generator)*0.1f*sizeOfObstacles;
         float sizeZ = dis(generator)*0.1f*sizeOfObstacles;
@@ -276,6 +287,26 @@ void OSGWidget::keyPressEvent( QKeyEvent* event )
     {
         this->onHome();
         return;
+    }
+    if(event->key() == Qt::Key_Up)
+    {
+        int arrowUp{1};
+        arrow_key_velocity_update(arrowUp);
+    }
+    if(event->key() == Qt::Key_Down)
+    {
+        int arrowDown{2};
+        arrow_key_velocity_update(arrowDown);
+    }
+    if(event->key() == Qt::Key_Left)
+    {
+        int arrowLeft{3};
+        arrow_key_velocity_update(arrowLeft);
+    }
+    if(event->key() == Qt::Key_Right)
+    {
+        int arrowRight{4};
+        arrow_key_velocity_update(arrowRight);
     }
     
     this->getEventQueue()->keyPress( osgGA::GUIEventAdapter::KeySymbol( *keyData ) );

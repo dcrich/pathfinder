@@ -22,16 +22,16 @@ boundingBox::boundingBox(float size, QVector4D& color)
 void boundingBox::create_sides_xy(btVector3 positionPhysics)
 {
     //btVector3 positionPhysics{mSize*.5f,mSize*.5f,0};
-    mGroundShape = new btBoxShape(btVector3(mSize*.5,mSize*.5,mSize*.005));
+    mGroundShape = new btBoxShape(btVector3(mSize*.5f,mSize*.5f,mSize*.005f));
     mGroundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),positionPhysics));
     mRigidCI= new btRigidBody::btRigidBodyConstructionInfo(0,mGroundMotionState,mGroundShape,btVector3(0,0,0));
-    mRigidCI->m_restitution = 0.9;
+    mRigidCI->m_restitution = 0.9f;
     mRigidBody = new btRigidBody(*mRigidCI);
 }
 void boundingBox::create_mesh()
 {
     osg::Vec3 positionOSG{baseCenter, baseCenter, 0.f};
-    mOSGBox  = new osg::Box( positionOSG, mSize,mSize,mSize*.01 );
+    mOSGBox  = new osg::Box( positionOSG, mSize,mSize,mSize*.01f );
     osg::ShapeDrawable* sd = new osg::ShapeDrawable( mOSGBox );
     sd->setColor(  osg::Vec4(mColor[0], mColor[1], mColor[2],mColor[3]));
 
@@ -118,7 +118,7 @@ void boundingBox::create_sides_xz( btVector3 positionPhysics)
     mGroundShape = new btBoxShape(btVector3(mSize*.5f,mSize*.005f,mSize*.5f));
     mGroundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),positionPhysics));
     mRigidCI= new btRigidBody::btRigidBodyConstructionInfo(0,mGroundMotionState,mGroundShape,btVector3(0,0,0));
-    mRigidCI->m_restitution = 0.9;
+    mRigidCI->m_restitution = 0.9f;
     mRigidBody = new btRigidBody(*mRigidCI);
 }
 
@@ -127,7 +127,7 @@ void boundingBox::create_sides_yz( btVector3 positionPhysics)
     mGroundShape = new btBoxShape(btVector3(mSize*.005f,mSize*.5f,mSize*.5f));
     mGroundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),positionPhysics));
     mRigidCI= new btRigidBody::btRigidBodyConstructionInfo(0,mGroundMotionState,mGroundShape,btVector3(0,0,0));
-    mRigidCI->m_restitution = 0.9;
+    mRigidCI->m_restitution = 0.9f;
     mRigidBody = new btRigidBody(*mRigidCI);
 }
 

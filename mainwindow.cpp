@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
   ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->mOSGMainWidget->setup_single_ball();
+    ui->mOSGMainWidget->setup_environment();
 }
 
 MainWindow::~MainWindow()

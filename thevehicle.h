@@ -1,32 +1,17 @@
-//-------------------------------------------------------
-// Filename: BouncyBall.h
-//
-// Description:  The h file for the qt5 opengl bullet bouncy ball example.
-//
-// Creator:  Professor Corey McBride for MEEN 570 - Brigham Young University
-//
-// Creation Date: 11/7/18
-//
-// Owner: Corey McBride
-//-------------------------------------------------------
-#ifndef BOUNCYBALL_H
-#define BOUNCYBALL_H
+#ifndef THEVEHICLE_H
+#define THEVEHICLE_H
 
 #include "btBulletDynamicsCommon.h"
 #include <QMatrix4x4>
 #include <osg/MatrixTransform>
 #include <osg/ShapeDrawable>
 
-
-
-class BouncyBall
+class theVehicle
 {
 public:
-    BouncyBall();
-    BouncyBall(QVector3D& initalPosition, QVector4D& mColor,
+    theVehicle(QVector3D& initalPosition, QVector4D& mColor,
                double mMass, double mRadius);
-    ~BouncyBall();
-
+    ~theVehicle();
     btRigidBody* getRigidBodyPtr() {return rigidBody;}
     osg::Node* getNode() {return mTransform.release();}
     void set_velocity(btVector3 velocityIncrease);
@@ -51,11 +36,10 @@ private:
     btTransform trans;
 
     void create();
-    void copy(const BouncyBall & other);
     void destroy();
 
     osg::ref_ptr<osg::MatrixTransform> mTransform;
-    osg::ref_ptr<osg::Cylinder> mOSGSphere;
+    osg::ref_ptr<osg::Box> mOSGBox;
 };
 
-#endif // BOUNCYBALL_H
+#endif // THEVEHICLE_H

@@ -68,7 +68,7 @@ void BouncyBall::create()
 
 
 
-    mOSGSphere   = new osg::Cylinder( osg::Vec3( 0.f, 0.f, 0.f ), mRadius, 10 );
+    mOSGSphere   = new osg::Sphere( osg::Vec3( 0.f, 0.f, 0.f ), mRadius);
     osg::ShapeDrawable* sd = new osg::ShapeDrawable( mOSGSphere );
     sd->setColor(  osg::Vec4(mColor[0], mColor[1], mColor[2],mColor[3]));
     sd->setName( "Sphere" );
@@ -88,6 +88,7 @@ void BouncyBall::create()
         stateSet->setMode( GL_DEPTH_TEST, osg::StateAttribute::ON );
     }
 
+    mModel = geode;
     mTransform->addChild(geode);
 }
 

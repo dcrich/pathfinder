@@ -26,6 +26,9 @@
 
 #include <random>
 
+#include "randomObstacles.h"
+
+
 
 
 OSGWidget::OSGWidget( QWidget* parent,
@@ -39,11 +42,11 @@ OSGWidget::OSGWidget( QWidget* parent,
     , mBusy{false}
 {
     set_up_physics();
+
     mStarted=false;
     
-    
     mRoot = new osg::Group;
-    
+    setup_environment();
     double aspectRatio = static_cast<double>( this->width() ) / static_cast<double>( this->height() );
     auto pixelRatio   = this->devicePixelRatio();
     
@@ -59,11 +62,15 @@ OSGWidget::OSGWidget( QWidget* parent,
     view->setSceneData( mRoot.get() );
     view->addEventHandler( new osgViewer::StatsHandler );
     
-    mManipulator = new osgGA::TrackballManipulator;
-    mManipulator->setAllowThrow( false );
+    osgGA::NodeTrackerManipulator *manipulator {new osgGA::NodeTrackerManipulator};
+    manipulator = new osgGA::NodeTrackerManipulator;
+    manipulator->setHomePosition(osg::Vec3d(500,-300,100),osg::Vec3d(500,0,0),osg::Vec3d(0,0,1));
+    manipulator->setTrackerMode(osgGA::NodeTrackerManipulator::NODE_CENTER);
+    manipulator->setTrackNode(mBouncyBall->getModel());
     
+    mManipulator = manipulator;
+
     view->setCameraManipulator( mManipulator );
-    mManipulator->setHomePosition(osg::Vec3d(3000,1500,1900),osg::Vec3d(0,0,0),osg::Vec3d(0,0,1));
     
     
     
@@ -128,11 +135,11 @@ void OSGWidget::arrow_key_velocity_update(int arrowDirection)
     }
     if (arrowDirection == 3)
     {
-        velocityIncrease = btVector3(100,0,0);
+        velocityIncrease = btVector3(-100,0,0);
     }
     if (arrowDirection == 4)
     {
-        velocityIncrease = btVector3(-100,0,0);
+        velocityIncrease = btVector3(100,0,0);
     }
     mBouncyBall->set_velocity(velocityIncrease);
 }
@@ -172,11 +179,11 @@ void OSGWidget::setup_environment()
     make_ground();
     QVector3D pos;
     QVector4D color;
-    pos=QVector3D(10,10,10); // starting position of ball
+    pos=QVector3D(500,10,10); // starting position of ball
     color =QVector4D(1,1,1,1);
-    mBouncyBall=new BouncyBall(pos, color, 100, 100);
+    mBouncyBall=new BouncyBall(pos, color, 100, 10);
     mDynamicsWorld->addRigidBody(mBouncyBall->getRigidBodyPtr());
-    mRoot->addChild(mBouncyBall->getNode());
+    mRoot->addChild(mBouncyBall->getTransform());
     
     mBusy=true;
     
@@ -191,8 +198,9 @@ void OSGWidget::make_balls()
     mBouncyBall=new BouncyBall(pos, color, 100, 10);
 
     mDynamicsWorld->addRigidBody(mBouncyBall->getRigidBodyPtr());
-    mRoot->addChild(mBouncyBall->getNode());
+    mRoot->addChild(mBouncyBall->getTransform());
 }
+
 void OSGWidget::timerEvent(QTimerEvent *)
 {
     update();
@@ -200,59 +208,44 @@ void OSGWidget::timerEvent(QTimerEvent *)
 
 void OSGWidget::reset_world()
 {
-
     if(mBusy)
     {
-        //stop_timer();
         while(mRoot->getNumChildren())
         {
             osg::Node* child=mRoot->getChild(0);
             mRoot->removeChild(child);
             
         }
-        
         delete mDynamicsWorld;
         mDynamicsWorld=nullptr;
         
         delete mBouncyBall;
         mBouncyBall=nullptr;
-        delete mObstacleBox;
-        mObstacleBox = nullptr;
-        
+
+        if (obstaclesCreated)
+        {
+            delete mObstacleBox;
+            mObstacleBox = nullptr;
+        }
         delete mGround;
         mGround = nullptr;
         set_up_physics();
     }
-    make_ground();
-    
+    setup_environment();
+    dynamic_cast<osgGA::NodeTrackerManipulator*>(mManipulator.get())->setTrackNode(mBouncyBall->getModel());
+    obstaclesCreated = false;
 }
 void OSGWidget::create_obstacles(int numberOfObstacles, int sizeOfObstacles)
 {
-    std::random_device rd;
-    std::mt19937 generator(rd());
-    std::uniform_real_distribution<float> dis(0,mSizeGround);
+    obstaclesCreated = true;
     for (int i{0}; i<numberOfObstacles; i++)
     {
-        float x = dis(generator);
-        float y = dis(generator);
-        float z = 0.f;
-        float sizeX = dis(generator)*0.1f*sizeOfObstacles;
-        float sizeY = dis(generator)*0.1f*sizeOfObstacles;
-        float sizeZ = dis(generator)*0.1f*sizeOfObstacles;
-        std::vector<float> obstacleSize{sizeX,sizeY,sizeZ};
-        std::vector<float> obstaclePosition{x,y,z};
-        mObstacleBox= new obstacleBoxes(obstacleSize, obstaclePosition);
+        randomObstacles newRandomObstacle;
+        mObstacleBox = newRandomObstacle.generate_random_obstacle(mSizeGround, sizeOfObstacles);
         mDynamicsWorld->addRigidBody(mObstacleBox->getRigidBodyPtr());
         mRoot->addChild(mObstacleBox->getNode());
 
     }
-    //    std::vector<float> obstacleSize{400.f,400.f,400.f};
-    //    std::vector<float> obstaclePosition{0.f,0.f,0.f};
-    //    mObstacleBox= new obstacleBoxes(obstacleSize, obstaclePosition);
-    //    mRoot->addChild(mObstacleBox->getNode());
-    //    mDynamicsWorld->addRigidBody(mObstacleBox->getRigidBodyPtr());
-
-
 }
 void OSGWidget::paintGL()
 {

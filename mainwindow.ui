@@ -72,12 +72,15 @@
            <property name="minimum">
             <number>1</number>
            </property>
+           <property name="maximum">
+            <number>50</number>
+           </property>
           </widget>
          </item>
          <item>
           <widget class="QLabel" name="label">
            <property name="text">
-            <string>Size of Obstacles (1-10)</string>
+            <string>Size of Obstacles (1-5)</string>
            </property>
           </widget>
          </item>
@@ -87,24 +90,70 @@
             <number>1</number>
            </property>
            <property name="maximum">
-            <number>10</number>
+            <number>5</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="bGenerate">
+           <property name="text">
+            <string>Generate</string>
            </property>
           </widget>
          </item>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
-            <widget class="QPushButton" name="bRun">
-             <property name="text">
+            <widget class="QGroupBox" name="verticalGroupBox">
+             <property name="font">
+              <font>
+               <pointsize>20</pointsize>
+               <weight>75</weight>
+               <bold>true</bold>
+               <underline>false</underline>
+              </font>
+             </property>
+             <property name="title">
               <string>Run</string>
              </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="bGenerate">
-             <property name="text">
-              <string>Generate</string>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
              </property>
+             <property name="flat">
+              <bool>false</bool>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_2">
+              <item>
+               <widget class="QPushButton" name="bRun">
+                <property name="font">
+                 <font>
+                  <pointsize>15</pointsize>
+                  <weight>50</weight>
+                  <bold>false</bold>
+                  <underline>false</underline>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Manual</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton">
+                <property name="font">
+                 <font>
+                  <pointsize>15</pointsize>
+                  <weight>50</weight>
+                  <bold>false</bold>
+                  <underline>false</underline>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Auto</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </widget>
            </item>
           </layout>

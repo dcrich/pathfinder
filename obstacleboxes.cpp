@@ -32,7 +32,8 @@ void obstacleBoxes::create_physics_box()
 }
 void obstacleBoxes::destroy()
 {
-    delete mRigidBody;
+    //if (mRigidBody != nullptr)
+        delete mRigidBody;
     delete mRigidConstructionInfo;
     delete mObstacleShape;
     delete mObstacleMotionState;

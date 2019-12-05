@@ -28,7 +28,8 @@ public:
     ~BouncyBall();
 
     btRigidBody* getRigidBodyPtr() {return rigidBody;}
-    osg::Node* getNode() {return mTransform.release();}
+    osg::ref_ptr<osg::Node> getModel() {return mModel;}
+    osg::ref_ptr<osg::Node> getTransform() {return mTransform;}
     void set_velocity(btVector3 velocityIncrease);
 private:
     std::vector<GLfloat> mColors;
@@ -54,8 +55,9 @@ private:
     void copy(const BouncyBall & other);
     void destroy();
 
+    osg::ref_ptr<osg::Node> mModel;
     osg::ref_ptr<osg::MatrixTransform> mTransform;
-    osg::ref_ptr<osg::Cylinder> mOSGSphere;
+    osg::ref_ptr<osg::Sphere> mOSGSphere;
 };
 
 #endif // BOUNCYBALL_H

@@ -10,7 +10,7 @@ class boundingBox
 public:
     boundingBox(float size,QVector4D& color);
     btRigidBody* getRigidBodyPtr() {return mRigidBody;}
-    osg::Node* getNode() {return mTransform.release();}
+    osg::Node* getNode() {return mTransform.get();}
     void create_sides_xz(btVector3 positionPhysics);
     void create_sides_yz(btVector3 positionPhysics);
 
@@ -19,7 +19,7 @@ private:
     float mSize;
     btCollisionShape* mGroundShape;
     btDefaultMotionState* mGroundMotionState;
-    btRigidBody* mRigidBody;
+    btRigidBody* mRigidBody{nullptr};
     btRigidBody::btRigidBodyConstructionInfo* mRigidCI;
     btScalar btMat[16];
     QMatrix4x4  M;

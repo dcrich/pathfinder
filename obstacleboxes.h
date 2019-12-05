@@ -22,7 +22,7 @@ private:
     float mPositionZ;
     btCollisionShape* mObstacleShape;
     btDefaultMotionState* mObstacleMotionState;
-    btRigidBody* mRigidBody;
+    btRigidBody* mRigidBody {nullptr};
     btRigidBody::btRigidBodyConstructionInfo* mRigidConstructionInfo;
     btScalar btMat[16];
     QMatrix4x4  M;

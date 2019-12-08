@@ -28,6 +28,8 @@
 
 #include "randomObstacles.h"
 
+#include <fstream>
+
 
 
 
@@ -94,13 +96,28 @@ OSGWidget::OSGWidget( QWidget* parent,
     
 }
 
-void OSGWidget::setup_camera()
-{
-    
-}
-
 OSGWidget::~OSGWidget()
 {
+}
+void OSGWidget::check_arena_map()
+{
+
+//    std::vector<float> checkBoxSize {1,1,100};
+//    std::vector<float> checkBoxPosition {0,0,0};
+//    std::vector<std::vector<int>> arenaStatusMap = newArenaMap->return_the_map();
+//    reset_world();
+//    for(size_t i{0}; i < mSizeGround; i++)
+//    {
+//        for(size_t j{0}; j < mSizeGround; j++)
+//        {
+//            if (arenaStatusMap[i][j] == 1)
+//            {
+//                checkBoxPosition = {static_cast<float>(i),static_cast<float>(j),0.f};
+//                obstacleBoxes checkBox(checkBoxSize,checkBoxPosition);
+//                mRoot->addChild(checkBox.getNode());
+//            }
+//        }
+//    }
 }
 
 void OSGWidget::set_up_physics()
@@ -120,28 +137,6 @@ void OSGWidget::set_up_physics()
     mTimeStep = 1/60.0;
     
     
-}
-
-void OSGWidget::arrow_key_velocity_update(int arrowDirection)
-{
-    btVector3 velocityIncrease;
-    if (arrowDirection == 1)
-    {
-        velocityIncrease = btVector3(0,100,0);
-    }
-    if (arrowDirection == 2)
-    {
-        velocityIncrease = btVector3(0,-100,0);
-    }
-    if (arrowDirection == 3)
-    {
-        velocityIncrease = btVector3(-100,0,0);
-    }
-    if (arrowDirection == 4)
-    {
-        velocityIncrease = btVector3(100,0,0);
-    }
-    mBouncyBall->set_velocity(velocityIncrease);
 }
 
 void OSGWidget::paintEvent( QPaintEvent* /* paintEvent */ )
@@ -244,7 +239,17 @@ void OSGWidget::create_obstacles(int numberOfObstacles, int sizeOfObstacles)
         mObstacleBox = newRandomObstacle.generate_random_obstacle(mSizeGround, sizeOfObstacles);
         mDynamicsWorld->addRigidBody(mObstacleBox->getRigidBodyPtr());
         mRoot->addChild(mObstacleBox->getNode());
-
+        newArenaMap->add_to_obstacle_matrix(newRandomObstacle.create_obstacle_area_matrix());
+    }
+    std::ofstream outputfile("arenaMap.txt");
+    std::vector<std::vector<int>> arenaStatusMap = newArenaMap->return_the_map();
+    for(size_t i{0}; i < mSizeGround; i++)
+    {
+        for(size_t j{0}; j < mSizeGround; j++)
+        {
+            outputfile << arenaStatusMap[i][j]<<" ";
+        }
+        outputfile << "\n";
     }
 }
 void OSGWidget::paintGL()
@@ -270,7 +275,27 @@ void OSGWidget::resizeGL( int width, int height )
     
     this->on_resize( width, height );
 }
-
+void OSGWidget::arrow_key_velocity_update(int arrowDirection)
+{
+    btVector3 velocityIncrease;
+    if (arrowDirection == 1)
+    {
+        velocityIncrease = btVector3(0,100,0);
+    }
+    if (arrowDirection == 2)
+    {
+        velocityIncrease = btVector3(0,-100,0);
+    }
+    if (arrowDirection == 3)
+    {
+        velocityIncrease = btVector3(-100,0,0);
+    }
+    if (arrowDirection == 4)
+    {
+        velocityIncrease = btVector3(100,0,0);
+    }
+    mBouncyBall->set_velocity(velocityIncrease);
+}
 void OSGWidget::keyPressEvent( QKeyEvent* event )
 {
     QString keyString   = event->text();
@@ -340,6 +365,8 @@ void OSGWidget::make_ground()
     mGround->create_sides_yz(sidePositionYZ2);
     mRoot->addChild(mGround->getNode());
     mDynamicsWorld->addRigidBody(mGround->getRigidBodyPtr());
+
+    newArenaMap = new arenaNodeMap(static_cast<size_t>(mSizeGround));
 }
 
 

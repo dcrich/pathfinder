@@ -14,6 +14,7 @@
 #include <osgViewer/CompositeViewer>
 #include "obstacleboxes.h"
 #include "boundingbox.h"
+#include "arenanodemap.h"
 
 
 class OSGWidget : public QOpenGLWidget
@@ -33,6 +34,7 @@ public:
     void create_obstacles(int numberOfObstacles, int sizeOfObstacles);
     void make_ground();
     void arrow_key_velocity_update(int arrowDirection);
+    void check_arena_map();
 
 protected:
     virtual void paintEvent( QPaintEvent* paintEvent );
@@ -69,8 +71,6 @@ private:
     btSequentialImpulseConstraintSolver* mSeqImpConstraintSolver;
     btDiscreteDynamicsWorld* mDynamicsWorld;
 
-    void setup_camera();
-
     double mTimeStep;
     bool mStarted;
     int mTimerId{0};
@@ -86,6 +86,7 @@ private:
     osg::Camera* camera;
     osgViewer::View* view;
     bool obstaclesCreated{false};
+    arenaNodeMap * newArenaMap;
 
     bool mBusy;
 };

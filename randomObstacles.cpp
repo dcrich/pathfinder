@@ -6,16 +6,16 @@ obstacleBoxes* randomObstacles::generate_random_obstacle(float mSizeGround, int 
 {
     std::random_device rd;
     std::mt19937 generator(rd());
-    std::uniform_real_distribution<float> dis(0,mSizeGround);
+    std::uniform_real_distribution<float> myDistribution(0,mSizeGround);
 
 
-    sizeX = dis(generator)*0.05f*sizeOfObstacles;
-    sizeY = dis(generator)*0.05f*sizeOfObstacles;
+    sizeX = myDistribution(generator)*0.05f*sizeOfObstacles;
+    sizeY = myDistribution(generator)*0.05f*sizeOfObstacles;
     //sizeZ = dis(generator)*0.05f*sizeOfObstacles;
     sizeZ = 20.f;
 
-    x = dis(generator);
-    y = dis(generator);
+    x = myDistribution(generator);
+    y = myDistribution(generator);
     z = sizeZ*.5f;
     check_if_in_boundary(x,sizeX,mSizeGround);
     check_if_in_boundary(y,sizeY,mSizeGround);
@@ -44,3 +44,16 @@ void check_if_in_boundary(float &position, float &size, float mSizeGround)
         size = size * .75f;
     }
 }
+
+std::vector<float> randomObstacles::create_obstacle_area_matrix()
+{
+    float xRangeLower = obstaclePosition[0] - obstacleSize[0]*0.5f;
+    float yRangeLower = obstaclePosition[1] - obstacleSize[1]*0.5f;
+    float xRangeUpper = obstaclePosition[0] + obstacleSize[0]*0.5f;
+    float yRangeUpper = obstaclePosition[1] + obstacleSize[1]*0.5f;
+
+    std::vector<float> obstacleFootprint{xRangeLower, yRangeUpper, xRangeUpper, yRangeLower};
+    return obstacleFootprint;
+}
+
+

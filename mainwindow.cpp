@@ -24,7 +24,6 @@ void MainWindow::on_bGenerate_clicked()
     numberOfObstacles = ui->numObstacles->value();
     sizeOfObstacles = ui->sizeObstacles->value();
     ui->mOSGMainWidget->create_obstacles(numberOfObstacles,sizeOfObstacles);
-
 }
 
 void MainWindow::on_bReset_clicked()
@@ -35,4 +34,9 @@ void MainWindow::on_bReset_clicked()
 void MainWindow::on_bRun_clicked()
 {
     ui->mOSGMainWidget->make_balls();
+}
+
+void MainWindow::on_bAutoRun_clicked()
+{
+    ui->mOSGMainWidget->check_arena_map();
 }

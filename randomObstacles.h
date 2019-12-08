@@ -8,6 +8,8 @@ class randomObstacles
 {
 public:
     obstacleBoxes* generate_random_obstacle(float mSizeGround, int sizeOfObstacles);
+    std::vector<float> create_obstacle_area_matrix();
+
 
 
 private:
@@ -22,6 +24,5 @@ private:
     obstacleBoxes * mObstacleBox;
 };
 void check_if_in_boundary(float &position, float &size, float mSizeGround);
-
 
 #endif // RANDOMOBSTACLES_H

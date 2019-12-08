@@ -28,6 +28,8 @@ private slots:
 
     void on_bRun_clicked();
 
+    void on_bAutoRun_clicked();
+
 private:
   Ui::MainWindow *ui;
   int numberOfObstacles;

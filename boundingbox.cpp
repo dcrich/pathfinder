@@ -68,14 +68,14 @@ void boundingBox::make_boundary_box(float mSize)
     osg::Vec3 osgVec3dscaleFactor(1.f, 1.f, 1.f);
     osg::Vec3Array* v = new osg::Vec3Array;
     v->resize( 8 );
-    (*v)[0].set( 0.f, 0.f, mSize);
-    (*v)[1].set(mSize, 0.f, mSize);
-    (*v)[2].set(mSize, mSize, mSize );
-    (*v)[3].set(0.f, mSize, mSize);
-    (*v)[4].set(0.f, 0.f, 0.f );
-    (*v)[5].set(mSize, 0.f, 0.f );
-    (*v)[6].set(mSize, mSize, 0.f );
-    (*v)[7].set(0.f, mSize, 0.f);
+    (*v)[0].set( 0.f, 0.f, mSize-5.f);
+    (*v)[1].set(mSize, 0.f, mSize-5.f);
+    (*v)[2].set(mSize, mSize, mSize-5.f);
+    (*v)[3].set(0.f, mSize, mSize-5.f);
+    (*v)[4].set(0.f, 0.f, 0.f-5.f);
+    (*v)[5].set(mSize, 0.f, 0.f-5.f);
+    (*v)[6].set(mSize, mSize, 0.f-5.f);
+    (*v)[7].set(0.f, mSize, 0.f-5.f);
 
     osg::Geometry* geom = new osg::Geometry;
     geom->setUseDisplayList( false );

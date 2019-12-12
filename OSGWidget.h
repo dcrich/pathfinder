@@ -9,6 +9,7 @@
 #include <osgGA/NodeTrackerManipulator>
 
 #include <osg/ref_ptr>
+#include <osg/Vec4>
 
 #include <osgViewer/GraphicsWindow>
 #include <osgViewer/CompositeViewer>
@@ -35,6 +36,7 @@ public:
     void make_ground();
     void arrow_key_velocity_update(int arrowDirection);
     void check_arena_map();
+    void set_goal();
 
 protected:
     virtual void paintEvent( QPaintEvent* paintEvent );
@@ -48,6 +50,7 @@ protected:
     virtual void mousePressEvent( QMouseEvent* event );
     virtual void mouseReleaseEvent( QMouseEvent* event );
     virtual void wheelEvent( QWheelEvent* event );
+
 
     virtual bool event( QEvent* event );
     void timerEvent(QTimerEvent *);
@@ -87,6 +90,15 @@ private:
     osgViewer::View* view;
     bool obstaclesCreated{false};
     arenaNodeMap * newArenaMap;
+    btVector3 currentPosition;
+    osg::Geode* goalGeode;
+    osg::Box* goalBox;
+    float sizeGoal{20};
+    float xGoalPosition{0};
+    float yGoalPosition = mSizeGround;
+    bool winStatus{false};
+
+
 
     bool mBusy;
 };

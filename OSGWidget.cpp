@@ -65,9 +65,9 @@ OSGWidget::OSGWidget( QWidget* parent,
     
     osgGA::NodeTrackerManipulator *manipulator {new osgGA::NodeTrackerManipulator};
     manipulator = new osgGA::NodeTrackerManipulator;
-    manipulator->setHomePosition(osg::Vec3d(500,-500,200),osg::Vec3d(500,0,0),osg::Vec3d(0,0,1));
+    manipulator->setHomePosition(osg::Vec3d(500,-1000,500),osg::Vec3d(500,0,0),osg::Vec3d(0,0,1));
     manipulator->setTrackerMode(osgGA::NodeTrackerManipulator::NODE_CENTER);
-    manipulator->setTrackNode(mBouncyBall->getModel());
+    manipulator->setTrackNode(mVehicle->getModel());
     mManipulator = manipulator;
     view->setCameraManipulator( mManipulator ); 
     mViewer->addView( view );
@@ -163,9 +163,9 @@ void OSGWidget::setup_environment()
     QVector4D color;
     pos=QVector3D(500,7,18); // starting position of ball
     color =QVector4D(1,1,1,1);
-    mBouncyBall=new BouncyBall(pos, color, 100, 10);
-    mDynamicsWorld->addRigidBody(mBouncyBall->getRigidBodyPtr());
-    mRoot->addChild(mBouncyBall->getTransform());
+    mVehicle=new theVehicle(pos, color, 100, 10);
+    mDynamicsWorld->addRigidBody(mVehicle->getRigidBodyPtr());
+    mRoot->addChild(mVehicle->getTransform());
     mBusy=true;
 }
 
@@ -176,23 +176,23 @@ void OSGWidget::make_balls()
     QVector4D color;
     pos=QVector3D(500,500,800); // starting position of ball
     color =QVector4D(1,1,1,1);
-    mBouncyBall=new BouncyBall(pos, color, 100, 10);
-    mDynamicsWorld->addRigidBody(mBouncyBall->getRigidBodyPtr());
-    mRoot->addChild(mBouncyBall->getTransform());
+    mVehicle=new theVehicle(pos, color, 100, 10);
+    mDynamicsWorld->addRigidBody(mVehicle->getRigidBodyPtr());
+    mRoot->addChild(mVehicle->getTransform());
 }
 
 
 void OSGWidget::timerEvent(QTimerEvent *)
 {
     update();
-    currentPosition =  mBouncyBall->getRigidBodyPtr()->getCenterOfMassPosition();
+    currentPosition =  mVehicle->getRigidBodyPtr()->getCenterOfMassPosition();
     float currentPositionX = currentPosition.getX();
     float currentPositionY = currentPosition.getY();
     float currentPositionZ = currentPosition.getZ();
 
     if (winStatus == false && currentPositionX < xGoalPosition+sizeGoal*.5f && currentPositionX > xGoalPosition-sizeGoal*.5f && currentPositionY < yGoalPosition+sizeGoal*.5f && currentPositionY > yGoalPosition-sizeGoal*.5f)
     {
-        mBouncyBall->getRigidBodyPtr()->setLinearVelocity(btVector3(0,0,1000));
+        mVehicle->getRigidBodyPtr()->setLinearVelocity(btVector3(0,0,1000));
         camera->setClearColor( osg::Vec4( 0.f, 0.6f, 0.f, 1.f ) );
         winStatus = true;
     }
@@ -216,8 +216,8 @@ void OSGWidget::reset_world()
         }
         delete mDynamicsWorld;
         mDynamicsWorld=nullptr;        
-        delete mBouncyBall;
-        mBouncyBall=nullptr;
+        delete mVehicle;
+        mVehicle=nullptr;
         if (obstaclesCreated)
         {
             delete mObstacleBox;
@@ -230,9 +230,10 @@ void OSGWidget::reset_world()
         set_up_physics();
     }
     setup_environment();
-    dynamic_cast<osgGA::NodeTrackerManipulator*>(mManipulator.get())->setTrackNode(mBouncyBall->getModel());
+    dynamic_cast<osgGA::NodeTrackerManipulator*>(mManipulator.get())->setTrackNode(mVehicle->getModel());
     camera->setClearColor( osg::Vec4( 0.6f, 0.6f, 0.6f, 1.f ) );
     obstaclesCreated = false;
+    winStatus = false;
 }
 
 
@@ -243,21 +244,21 @@ void OSGWidget::create_obstacles(int numberOfObstacles, int sizeOfObstacles)
     for (int i{0}; i<numberOfObstacles; i++)
     {
         randomObstacles newRandomObstacle;
-        mObstacleBox = newRandomObstacle.generate_random_obstacle(mSizeGround, sizeOfObstacles, xGoalPosition,yGoalPosition,sizeGoal);
+        mObstacleBox = newRandomObstacle.generate_random_obstacle(mSizeGround, numberOfObstacles, xGoalPosition,yGoalPosition,sizeGoal);
         mDynamicsWorld->addRigidBody(mObstacleBox->getRigidBodyPtr());
         mRoot->addChild(mObstacleBox->getNode());
         newArenaMap->add_to_obstacle_matrix(newRandomObstacle.create_obstacle_area_matrix());
     }
-    std::ofstream outputfile("arenaMap.txt");
-    std::vector<std::vector<bool>> arenaStatusMap = newArenaMap->return_the_map();
-    for(size_t i{0}; i < mSizeGround; i++)
-    {
-        for(size_t j{0}; j < mSizeGround; j++)
-        {
-            outputfile << arenaStatusMap[i][j]<<" ";
-        }
-        outputfile << "\n";
-    }
+//    std::ofstream outputfile("arenaMap.txt");
+//    std::vector<std::vector<bool>> arenaStatusMap = newArenaMap->return_the_map();
+//    for(size_t i{0}; i < mSizeGround; i++)
+//    {
+//        for(size_t j{0}; j < mSizeGround; j++)
+//        {
+//            outputfile << arenaStatusMap[i][j]<<" ";
+//        }
+//        outputfile << "\n";
+//    }
 }
 
 
@@ -307,7 +308,7 @@ void OSGWidget::arrow_key_velocity_update(int arrowDirection)
     {
         velocityIncrease = btVector3(0,0,100);
     }
-    mBouncyBall->set_velocity(velocityIncrease);
+    mVehicle->set_velocity(velocityIncrease);
 }
 
 

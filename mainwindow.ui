@@ -63,14 +63,14 @@
          <item>
           <widget class="QLabel" name="label_2">
            <property name="text">
-            <string>Number of Obstacles</string>
+            <string>Number of Obstacles(10-50)</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QSpinBox" name="numObstacles">
            <property name="minimum">
-            <number>1</number>
+            <number>10</number>
            </property>
            <property name="maximum">
             <number>50</number>

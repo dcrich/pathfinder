@@ -2,7 +2,7 @@
 #include "randomObstacles.h"
 
 
-obstacleBoxes* randomObstacles::generate_random_obstacle(float mSizeGround, int sizeOfObstacles, float xGoal, float yGoal, float sizeGoal)
+obstacleBoxes* randomObstacles::generate_random_obstacle(float mSizeGround, int numberofObstacles, float xGoal, float yGoal, float sizeGoal)
 {
     goalX = xGoal;
     goalY = yGoal;
@@ -12,9 +12,9 @@ obstacleBoxes* randomObstacles::generate_random_obstacle(float mSizeGround, int 
     std::mt19937 generator(rd());
     std::uniform_real_distribution<float> myDistribution(0,mSizeGround);
 
-    sizeX = myDistribution(generator)*0.05f*sizeOfObstacles;
+    sizeX = myDistribution(generator)*.5f*(10.f/numberofObstacles);
 
-    sizeY = myDistribution(generator)*0.05f*sizeOfObstacles;
+    sizeY = myDistribution(generator)*.5f*(10.f/numberofObstacles);
     sizeZ = 20.f;
 
     x = myDistribution(generator);

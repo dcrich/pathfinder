@@ -8,12 +8,16 @@
 
 class theVehicle
 {
+
 public:
+    theVehicle();
     theVehicle(QVector3D& initalPosition, QVector4D& mColor,
                double mMass, double mRadius);
     ~theVehicle();
+
     btRigidBody* getRigidBodyPtr() {return rigidBody;}
-    osg::Node* getNode() {return mTransform.release();}
+    osg::ref_ptr<osg::Node> getModel() {return mModel;}
+    osg::ref_ptr<osg::Node> getTransform() {return mTransform;}
     void set_velocity(btVector3 velocityIncrease);
 private:
     std::vector<GLfloat> mColors;
@@ -38,8 +42,10 @@ private:
     void create();
     void destroy();
 
+    osg::ref_ptr<osg::Node> mModel;
     osg::ref_ptr<osg::MatrixTransform> mTransform;
-    osg::ref_ptr<osg::Box> mOSGBox;
+    osg::ref_ptr<osg::Sphere> mOSGSphere;
 };
+
 
 #endif // THEVEHICLE_H

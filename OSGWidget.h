@@ -4,7 +4,6 @@
 #include <QPoint>
 #include <QOpenGLWidget>
 #include "btBulletDynamicsCommon.h"
-#include "BouncyBall.h"
 #include <osgGA/TrackballManipulator>
 #include <osgGA/NodeTrackerManipulator>
 
@@ -16,6 +15,7 @@
 #include "obstacleboxes.h"
 #include "boundingbox.h"
 #include "arenanodemap.h"
+#include "thevehicle.h"
 
 
 class OSGWidget : public QOpenGLWidget
@@ -81,7 +81,7 @@ private:
     boundingBox* mGround;
     float mSizeGround{1000};
     obstacleBoxes * mObstacleBox;
-    BouncyBall* mBouncyBall;
+    theVehicle* mVehicle;
     void set_up_physics();
     void createWorld();
     osg::ref_ptr<osg::Group> mRoot;

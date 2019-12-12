@@ -7,7 +7,7 @@
 class randomObstacles
 {
 public:
-    obstacleBoxes* generate_random_obstacle(float mSizeGround, int sizeOfObstacles, float xGoal, float yGoal, float sizeGoal);
+    obstacleBoxes* generate_random_obstacle(float mSizeGround, int numberofObstacles, float xGoal, float yGoal, float sizeGoal);
     std::vector<float> create_obstacle_area_matrix();
 
 

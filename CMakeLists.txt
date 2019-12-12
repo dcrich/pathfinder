@@ -72,8 +72,6 @@ SET(MYSOURCE
     OSGWidget.cpp
     )
 add_library(physicsWorldStuff STATIC
-    BouncyBall.h
-    BouncyBall.cpp
     obstacleboxes.cpp
     obstacleboxes.h
     boundingbox.cpp
@@ -86,6 +84,8 @@ add_library(physicsWorldStuff STATIC
     arenanodemap.h
     pathfinder.cpp
     pathfinder.h
+    mapnode.cpp
+    mapnode.h
     )
 target_link_libraries(physicsWorldStuff
     Qt5::Widgets

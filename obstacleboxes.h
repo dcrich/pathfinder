@@ -27,7 +27,7 @@ private:
     btScalar btMat[16];
     QMatrix4x4  M;
     btTransform trans;
-    QVector4D mColor{0.5,0,0,1.0};
+    QVector4D mColor{0.651f,0.208f,0.2235f,1.0};
 
     void create_physics_box();
     void destroy();

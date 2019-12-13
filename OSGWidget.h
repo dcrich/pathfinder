@@ -99,6 +99,7 @@ private:
     osg::Geode* pathGeode;
     osg::Box* pathBox;
     osg::Sphere* pathSphere;
+    float radiusVirtual{15};
     bool obstaclesCreated{false};
     bool winStatus{false};
     bool mBusy;

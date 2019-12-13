@@ -60,11 +60,12 @@ void OSGWidget::run_auto_path()
                        static_cast<size_t>(xGoalPosition),static_cast<size_t>(yGoalPosition));
     autoPath = newPath.return_path();
     float counterIsPathPossible{1};
+    radiusVirtual = 10;
     while(!autoPath.empty())
     {
 
        autoCoordinates = autoPath.front();
-       reveal_path();
+//       reveal_path();
 //       mVehicle->set_position(autoCoordinates);
        sphere_travel(counterIsPathPossible);
        autoPath.pop();
@@ -72,7 +73,7 @@ void OSGWidget::run_auto_path()
     }
     if (counterIsPathPossible<10)
     {
-        camera->setClearColor( osg::Vec4( .6f, 0.f, 0.f, 1.f ) );
+        camera->setClearColor( osg::Vec4(.541f, 0.18f, 0.192f, 1.f) );
     }
 }
 
@@ -147,7 +148,7 @@ void OSGWidget::create_obstacles(int numberOfObstacles)
 
 void OSGWidget::make_ground()
 {
-    QVector4D ground_color(0.5,0.5,0.5,1);
+    QVector4D ground_color(0.18f,0.349f,0.2274f,1);
 
     mGround= new boundingBox(mSizeGround,ground_color);
     mRoot->addChild(mGround->getNode());
@@ -178,7 +179,7 @@ void OSGWidget::set_goal()
     osg::Vec3 positionOSG{xGoalPosition, yGoalPosition, 50.f};
     goalBox = new  osg::Box ( positionOSG, mSizeGround,sizeGoal,sizeGoal*5.f);
     osg::ShapeDrawable* sd = new osg::ShapeDrawable( goalBox );
-    sd->setColor(osg::Vec4(0.f,0.6f,0.f,1.f));
+    sd->setColor(osg::Vec4(0.404f,0.651f,0.4667f,1.f));
     goalGeode->addDrawable( sd );
     osg::StateSet* stateSet = goalGeode->getOrCreateStateSet();
     osg::Material* material = new osg::Material;
@@ -191,14 +192,14 @@ void OSGWidget::set_goal()
 
 void OSGWidget::sphere_travel(float counterRadius)
 {
-    float radiusVirtual = 5+(10.f/counterRadius);
+    radiusVirtual = radiusVirtual - (1.f/counterRadius);
     float pathX = autoCoordinates[0];
     float pathY = autoCoordinates[1];
     pathGeode = new osg::Geode;
     osg::Vec3 positionOSG{pathX, pathY, 15.f};
     pathSphere = new  osg::Sphere ( positionOSG, radiusVirtual);
     osg::ShapeDrawable* sd = new osg::ShapeDrawable( pathSphere );
-    sd->setColor(osg::Vec4(0.f,0.f,0.f,1.f));
+    sd->setColor(osg::Vec4(0.949f,0.8157f,0.4196f,1.f));
     pathGeode->addDrawable( sd );
     osg::StateSet* stateSet = pathGeode->getOrCreateStateSet();
     osg::Material* material = new osg::Material;
@@ -254,12 +255,12 @@ void OSGWidget::timerEvent(QTimerEvent *)
     if (winStatus == false && currentPositionY >yGoalPosition)
     {
         mVehicle->getRigidBodyPtr()->setLinearVelocity(btVector3(0,0,1000));
-        camera->setClearColor( osg::Vec4( 0.f, 0.6f, 0.f, 1.f ) );
+        camera->setClearColor( osg::Vec4(0.949f,0.8157f,0.4196f,1.f));
         winStatus = true;
     }
     if (currentPositionZ < 0 && winStatus == false)
     {
-        camera->setClearColor( osg::Vec4( .6f, 0.f, 0.f, 1.f ) );
+        camera->setClearColor( osg::Vec4(0.541f, 0.18f, 0.192f, 1.f));
     }
 
 }

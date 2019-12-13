@@ -20,12 +20,8 @@ class pathFinder
 public:
     pathFinder(std::vector<std::vector<bool>> &obstacleMap, size_t mapSize, size_t xStart, size_t yStart, size_t xGoal, size_t yGoal);
     ~pathFinder();
-    void find_the_shortest_path(std::vector<std::vector<bool>> &obstacleMap);
-    void initialize_map(std::vector<std::vector<bool>> &obstacleMap);
+    void initialize_map();
     void iterate_through_map();
-    void check_node_left();
-    void check_node_right();
-    void check_node_forward();
     void node_check(size_t x, size_t y);
     void check_if_goal();
     std::queue<std::vector<size_t>> return_path();

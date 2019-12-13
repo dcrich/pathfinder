@@ -22,8 +22,7 @@ MainWindow::~MainWindow()
 void MainWindow::on_bGenerate_clicked()
 {
     numberOfObstacles = ui->numObstacles->value();
-    sizeOfObstacles = ui->sizeObstacles->value();
-    ui->mOSGMainWidget->create_obstacles(numberOfObstacles,sizeOfObstacles);
+    ui->mOSGMainWidget->create_obstacles(numberOfObstacles);
 }
 
 void MainWindow::on_bReset_clicked()

@@ -4,27 +4,20 @@
 
 pathFinder::pathFinder(std::vector<std::vector<bool>> &obstacleMap, size_t mapSize, size_t xStart,size_t yStart, size_t xGoal,size_t yGoal)
 {
+    theObstacles = obstacleMap;
     sizeMap = mapSize;
     mapNodes.resize(mapSize,std::vector<Node>(mapSize));
     startX = xStart;
     startY = yStart;
     goalX = xGoal;
     goalY = yGoal;
-    find_the_shortest_path(obstacleMap);
-}
-
-
-void pathFinder::find_the_shortest_path(std::vector<std::vector<bool>> &obstacleMap)
-{
-    initialize_map(obstacleMap);
+    initialize_map();
     iterate_through_map();
-
 }
 
-void pathFinder::initialize_map(std::vector<std::vector<bool>> &obstacleMap)
-{
-    theObstacles = obstacleMap;
 
+void pathFinder::initialize_map()
+{
     for (size_t i{0};i<sizeMap;i++)
     {
         for (size_t j{0};j<sizeMap;j++)
@@ -50,12 +43,8 @@ void pathFinder::iterate_through_map()
 {
     openList.push(mapNodes[startX][startY]);
     counter = 0;
-//    while (!openList.empty() && lookingForGoal && counter < 10000000)
-    while (lookingForGoal)
+    while (lookingForGoal && counter < 10000000)
     {
-//        check_node_left();
-//        check_node_right();
-//        check_node_forward();
         checkNodeDirection = 1;
         node_check(openList.front().x-1,openList.front().y);
         checkNodeDirection = 2;
@@ -71,7 +60,7 @@ void pathFinder::iterate_through_map()
             std::vector<size_t> xyPath {currentX,currentY};
             thePath.push(xyPath);
             size_t i{0};
-            //            for (size_t i{0}; i<openList.front().distanceFromStart; i++)
+
             while (mapNodes[currentX][currentY].parentX != startX && mapNodes[currentX][currentY].parentY != startY)
             {
                 currentX = mapNodes[currentX][currentY].parentX;
@@ -79,59 +68,18 @@ void pathFinder::iterate_through_map()
                 xyPath = {currentX,currentY};
                 thePath.push(xyPath);
                 i++;
-            }
+            }            
             xyPath = {startX,startY};
             thePath.push(xyPath);
-        }
+        }        
         else
         {
             closedList.push(openList.front());
             openList.pop();
-        }
+        }        
         counter++;
     }
-
 }
-
-
-//void pathFinder::check_node_left()
-//{
-//    checkNodeDirection = 1;
-//    if (theObstacles[openList.front().x][openList.front().y] == false)
-//    {
-//        size_t i = openList.front().x-1;
-//        size_t j = openList.front().y;
-//        node_check(i,j);
-//    }
-//    else
-//    {
-
-//    }
-//}
-
-
-//void pathFinder::check_node_right()
-//{
-//    checkNodeDirection = 2;
-//    if (theObstacles[openList.front().x][openList.front().y] == false)
-//    {
-//        size_t i = openList.front().x+1;
-//        size_t j = openList.front().y;
-//        node_check(i,j);
-//    }
-//}
-
-
-//void pathFinder::check_node_forward()
-//{
-//    checkNodeDirection = 3;
-//    if (theObstacles[openList.front().x][openList.front().y] == false)
-//    {
-//        size_t i = openList.front().x;
-//        size_t j = openList.front().y+1;
-//        node_check(i,j);
-//    }
-//}
 
 
 void pathFinder::node_check(size_t i, size_t j)
@@ -146,6 +94,7 @@ void pathFinder::node_check(size_t i, size_t j)
             mapNodes[i][j].parentX = theParentX;
             mapNodes[i][j].parentY = theParentY;
             mapNodes[i][j].needToCheck = false;
+
             if (checkNodeDirection == 1)
             {
                 openList.push(mapNodes[openList.front().x-1][openList.front().y]);
@@ -173,14 +122,19 @@ void pathFinder::node_check(size_t i, size_t j)
     }
 }
 
+
 void pathFinder::check_if_goal()
 {
-//    if(openList.front().x == goalX && openList.front().y == goalY)
     if(openList.front().y > goalY-20)
     {
         lookingForGoal = false;
     }
+    else
+    {
+        lookingForGoal = true;
+    }
 }
+
 
 std::queue<std::vector<size_t>> pathFinder::return_path()
 {
@@ -188,8 +142,6 @@ std::queue<std::vector<size_t>> pathFinder::return_path()
 }
 
 
-
 pathFinder::~pathFinder()
 {
-
 }

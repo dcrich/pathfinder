@@ -33,11 +33,13 @@ public:
     void setup_environment();
     void reset_world();
     void make_balls();
-    void create_obstacles(int numberOfObstacles, int sizeOfObstacles);
+    void create_obstacles(int numberOfObstacles);
     void make_ground();
     void arrow_key_velocity_update(int arrowDirection);
     void run_auto_path();
     void set_goal();
+    void set_camera_view();
+    void reveal_path();
 
 protected:
     virtual void paintEvent( QPaintEvent* paintEvent );
@@ -97,10 +99,19 @@ private:
     size_t xStart{500};
     size_t yStart{1};
     float sizeGoal{20};
-    float xGoalPosition{0};
-    float yGoalPosition = 999;
+    float xGoalPosition{500};
+    float yGoalPosition{mSizeGround-1};
     bool winStatus{false};
     std::queue<std::vector<size_t>> autoPath;
+    btVector3 velocityIncrease;
+    QVector3D pos;
+    QVector4D color;
+    std::vector<size_t> autoCoordinates;
+    osg::Geode* pathGeode;
+    osg::Box* pathBox;
+
+
+
 
 
 

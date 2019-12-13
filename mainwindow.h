@@ -16,18 +16,10 @@ public:
   explicit MainWindow(QWidget *parent = 0);
   ~MainWindow();
 
-public slots:
-
-
 private slots:
-
-
     void on_bGenerate_clicked();
-
     void on_bReset_clicked();
-
     void on_bRun_clicked();
-
     void on_bAutoRun_clicked();
 
 private:

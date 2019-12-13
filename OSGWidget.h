@@ -39,6 +39,7 @@ public:
     void set_goal();
     void set_camera_view();
     void reveal_path();
+    void sphere_travel(float counterRadius);
 
 protected:
     virtual void paintEvent( QPaintEvent* paintEvent );
@@ -97,6 +98,7 @@ private:
     std::vector<size_t> autoCoordinates;
     osg::Geode* pathGeode;
     osg::Box* pathBox;
+    osg::Sphere* pathSphere;
     bool obstaclesCreated{false};
     bool winStatus{false};
     bool mBusy;

@@ -67,8 +67,8 @@ TEST(makeSureObjectInBoundary, whenRandomObjectsGeneratedAboveBoundary_expectPos
     float positionX{1000};
     float sizeX{10};
     float environmentDimension{1000};
-    float checkPositionX = environmentDimension - sizeX*.5f;
-    float checkSizeX = sizeX *.75f;
+    float checkPositionX = environmentDimension - sizeX*.5f-20.f;
+    float checkSizeX = sizeX;
 
     check_if_in_boundary(positionX,sizeX,environmentDimension);
 
@@ -81,8 +81,8 @@ TEST(makeSureObjectInBoundary, whenRandomObjectsGeneratedBelowBoundary_expectPos
     float positionX{0};
     float sizeX{10};
     float environmentDimension{1000};
-    float checkPositionX = positionX + sizeX*.5f;
-    float checkSizeX = sizeX *.75f;
+    float checkPositionX = positionX + sizeX*.5f+20;
+    float checkSizeX = sizeX;
 
     check_if_in_boundary(positionX,sizeX,environmentDimension);
 
@@ -95,10 +95,8 @@ TEST(makeSureObjectInBoundary, whenRandomObjectsGeneratedBelowBoundaryThenShifte
     float positionX{0};
     float sizeX{1000};
     float environmentDimension{1000};
-    float checkPositionX = positionX + sizeX*.5f;
-    float checkSizeX = sizeX *.75f;
-    checkPositionX = environmentDimension - sizeX*.5f;
-    checkSizeX = sizeX *.75f;
+    float checkPositionX = positionX + sizeX*.5f -20.f;
+    float checkSizeX = sizeX;
 
     check_if_in_boundary(positionX,sizeX,environmentDimension);
 

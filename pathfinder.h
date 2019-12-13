@@ -36,13 +36,14 @@ private:
     std::queue <Node> closedList;
     bool lookingForGoal{true};
     std::queue<std::vector<size_t>> thePath;
-
     std::vector<std::vector<Node>> mapNodes;
     std::vector<std::vector<bool>> theObstacles;
     int counter{0};
     int checkNodeDirection{1};
     size_t theParentX;
     size_t theParentY;
+    bool listCheck{true};
+    std::vector<size_t> xyPath;
 };
 
 #endif // PATHFINDER_H

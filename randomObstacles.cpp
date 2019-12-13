@@ -2,17 +2,22 @@
 #include "randomObstacles.h"
 
 
-obstacleBoxes* randomObstacles::generate_random_obstacle(float mSizeGround, int numberOfObstacles)
+obstacleBoxes* randomObstacles::generate_random_obstacle(float mSizeGround)
 {
     maxSize = mSizeGround;
 
-    generate_random_size(sizeX, numberOfObstacles);
-    generate_random_size(sizeY, numberOfObstacles);
+    generate_random_size(sizeX);
+    generate_random_size(sizeY);
     sizeZ = 20.f;
 
     generate_random_coordinate(x);
     generate_random_coordinate(y);
+    if (x<20)
+    {
+        y=y+20;
+    }
     z = sizeZ*.5f;
+
     check_if_in_boundary(x,sizeX,maxSize);
     check_if_in_boundary(y,sizeY,maxSize);
 
@@ -23,7 +28,7 @@ obstacleBoxes* randomObstacles::generate_random_obstacle(float mSizeGround, int 
 }
 
 
-void randomObstacles::generate_random_size(float &dimensionOfInterest, int numberOfObstacles)
+void randomObstacles::generate_random_size(float &dimensionOfInterest)
 {
     float minSizeObstacle = .05f*maxSize;
     float maxSizeOfObstacle = .2f*maxSize;
@@ -61,17 +66,14 @@ void check_if_in_boundary(float &position, float &size, float maxSize)
 {
     if (size*.5f + position >=maxSize)
     {
-        position = maxSize - size*.5f;
-        size = size * .75f;
+        position = maxSize - size*.5f - 20.f;
     }
     if ( position - (.5f * size) <= 0)
     {
-        position = position + size * .5f;
-        size = size * .75f;
+        position = position + 20.f + size * .5f;
     }
     if (size*.5f + position >=maxSize)
     {
-        position = maxSize - size*.5f;
-        size = size * .75f;
+        position = maxSize - size*.5f - 20.f;
     }
 }

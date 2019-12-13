@@ -7,10 +7,10 @@
 class randomObstacles
 {
 public:
-    obstacleBoxes* generate_random_obstacle(float mSizeGround, int numberofObstacles);
+    obstacleBoxes* generate_random_obstacle(float mSizeGround);
     std::vector<float> create_obstacle_area_matrix();
     void generate_random_coordinate(float &coordinateOfInterest);
-    void generate_random_size(float &dimensionOfInterest, int numberOfObstacles);
+    void generate_random_size(float &dimensionOfInterest);
 
 
 private:

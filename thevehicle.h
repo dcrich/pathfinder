@@ -10,7 +10,6 @@ class theVehicle
 {
 
 public:
-    theVehicle();
     theVehicle(QVector3D& initalPosition, QVector4D& mColor,
                double mMass, double mRadius);
     ~theVehicle();
@@ -19,6 +18,7 @@ public:
     osg::ref_ptr<osg::Node> getModel() {return mModel;}
     osg::ref_ptr<osg::Node> getTransform() {return mTransform;}
     void set_velocity(btVector3 velocityIncrease);
+    void set_position(std::vector<size_t> desiredPosition);
 private:
     std::vector<GLfloat> mColors;
     btCollisionShape* mSphereShape;
@@ -26,12 +26,10 @@ private:
     btRigidBody* rigidBody;
     btRigidBody::btRigidBodyConstructionInfo* rigidCI;
 
-
-    QMatrix4x4 mMVP;
-
     QVector3D mResetPosition;
     QVector4D mColor;
-    double mMass, mRadius;
+    float mMass;
+    float mRadius;
 
     btVector3* inertia;
 

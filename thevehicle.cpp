@@ -34,6 +34,14 @@ public:
     }
 };
 
+theVehicle::theVehicle(QVector3D &initialPosition, QVector4D &color, double mass, double radius)
+{
+    mResetPosition=initialPosition;
+    mColor=color;
+    mMass = static_cast<float>(mass);
+    mRadius = static_cast<float>(radius);
+    create();
+}
 
 
 void theVehicle::create()
@@ -45,7 +53,7 @@ void theVehicle::create()
     mSphereShape->calculateLocalInertia(mMass, *inertia);
 
     rigidCI = new btRigidBody::btRigidBodyConstructionInfo(mMass, motionState, mSphereShape, *inertia);
-    rigidCI->m_restitution = 0.9;
+    rigidCI->m_restitution = 0.9f;
     rigidBody = new btRigidBody(*rigidCI);
 
     mTransform = new osg::MatrixTransform;
@@ -76,6 +84,7 @@ void theVehicle::set_velocity(btVector3 velocityIncrease)
     rigidBody->setLinearVelocity(newVelocity);
 }
 
+
 void theVehicle::destroy()
 {
     delete rigidBody->getMotionState();
@@ -85,25 +94,22 @@ void theVehicle::destroy()
     delete rigidCI;
 }
 
-theVehicle::theVehicle()
-{
-    mColor=QVector4D(0,0,1,1);
-    mResetPosition=QVector3D(100,100,0);
-    mMass = 10;
-    mRadius = 10;
-    create();
-}
-
-theVehicle::theVehicle(QVector3D &initialPosition, QVector4D &color, double mass, double radius)
-{
-    mResetPosition=initialPosition;
-    mColor=color;
-    mMass = mass;
-    mRadius = radius;
-    create();
-}
-
 theVehicle::~theVehicle()
 {
     destroy();
+}
+void theVehicle::set_position(std::vector<size_t> desiredPosition)
+{
+//    btVector3 desiredPositionBt(desiredPosition[1],desiredPosition[0],5);
+//    btTransform transform;
+//    transform.setIdentity();
+
+//    transform.setOrigin(desiredPositionBt);
+//    rigidBody->setWorldTransform(transform);
+//    rigidBody->getMotionState()->setWorldTransform(transform);
+
+//    rigidBody->setLinearVelocity(btVector3(0.0f, 0.0f, 0.0f));
+//    rigidBody->setAngularVelocity(btVector3(0.0f, 0.0f, 0.0f));
+//    rigidBody->clearForces();
+
 }

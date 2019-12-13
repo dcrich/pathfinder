@@ -45,6 +45,11 @@ void pathFinder::iterate_through_map()
     counter = 0;
     while (lookingForGoal && counter < 10000000)
     {
+        if (openList.empty())
+        {
+            listCheck = false;
+            break;
+        }
         checkNodeDirection = 1;
         node_check(openList.front().x-1,openList.front().y);
         checkNodeDirection = 2;
@@ -57,7 +62,7 @@ void pathFinder::iterate_through_map()
         {
             size_t currentX = openList.front().x;
             size_t currentY = openList.front().y;
-            std::vector<size_t> xyPath {currentX,currentY};
+            xyPath = {currentX,currentY};
             thePath.push(xyPath);
             size_t i{0};
 
@@ -78,6 +83,11 @@ void pathFinder::iterate_through_map()
             openList.pop();
         }
         counter++;
+    }
+    if (listCheck == false)
+    {
+        xyPath = {startX,startY};
+        thePath.push(xyPath);
     }
 }
 

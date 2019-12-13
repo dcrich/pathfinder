@@ -59,11 +59,20 @@ void OSGWidget::run_auto_path()
     pathFinder newPath(arenaStatusMap,static_cast<size_t>(mSizeGround),xStart,yStart,
                        static_cast<size_t>(xGoalPosition),static_cast<size_t>(yGoalPosition));
     autoPath = newPath.return_path();
+    float counterIsPathPossible{1};
     while(!autoPath.empty())
     {
+
        autoCoordinates = autoPath.front();
        reveal_path();
+//       mVehicle->set_position(autoCoordinates);
+       sphere_travel(counterIsPathPossible);
        autoPath.pop();
+       counterIsPathPossible++;
+    }
+    if (counterIsPathPossible<10)
+    {
+        camera->setClearColor( osg::Vec4( .6f, 0.f, 0.f, 1.f ) );
     }
 }
 
@@ -109,14 +118,14 @@ void OSGWidget::setup_environment()
     mVehicle=new theVehicle(vehicleStartPosition, vehicleColor, 100, 10);
     mDynamicsWorld->addRigidBody(mVehicle->getRigidBodyPtr());
     mRoot->addChild(mVehicle->getTransform());
-    mVehicle->getRigidBodyPtr()->setLinearVelocity(btVector3(1,10,20));
+    mVehicle->getRigidBodyPtr()->setLinearVelocity(btVector3(1,5,20));
     mBusy=true;
 }
 
 
 void OSGWidget::run_manual()
 {
-    mVehicle->getRigidBodyPtr()->setLinearVelocity(btVector3(1,10,100));
+    mVehicle->getRigidBodyPtr()->setLinearVelocity(btVector3(1,5,100));
     btVector3 currentVelcheck = mVehicle->getRigidBodyPtr()->getLinearVelocity();
 }
 
@@ -128,7 +137,7 @@ void OSGWidget::create_obstacles(int numberOfObstacles)
     for (int i{0}; i<numberOfObstacles; i++)
     {
         randomObstacles newRandomObstacle;
-        mObstacleBox = newRandomObstacle.generate_random_obstacle(mSizeGround, numberOfObstacles);
+        mObstacleBox = newRandomObstacle.generate_random_obstacle(mSizeGround);
         mDynamicsWorld->addRigidBody(mObstacleBox->getRigidBodyPtr());
         mRoot->addChild(mObstacleBox->getNode());
         newArenaMap->add_to_obstacle_matrix(newRandomObstacle.create_obstacle_area_matrix());
@@ -177,6 +186,26 @@ void OSGWidget::set_goal()
     stateSet->setAttributeAndModes( material, osg::StateAttribute::ON );
     stateSet->setMode( GL_DEPTH_TEST, osg::StateAttribute::ON );
     mRoot->addChild(goalGeode);
+}
+
+
+void OSGWidget::sphere_travel(float counterRadius)
+{
+    float radiusVirtual = 5+(10.f/counterRadius);
+    float pathX = autoCoordinates[0];
+    float pathY = autoCoordinates[1];
+    pathGeode = new osg::Geode;
+    osg::Vec3 positionOSG{pathX, pathY, 15.f};
+    pathSphere = new  osg::Sphere ( positionOSG, radiusVirtual);
+    osg::ShapeDrawable* sd = new osg::ShapeDrawable( pathSphere );
+    sd->setColor(osg::Vec4(0.f,0.f,0.f,1.f));
+    pathGeode->addDrawable( sd );
+    osg::StateSet* stateSet = pathGeode->getOrCreateStateSet();
+    osg::Material* material = new osg::Material;
+    material->setColorMode( osg::Material::AMBIENT_AND_DIFFUSE );
+    stateSet->setAttributeAndModes( material, osg::StateAttribute::ON );
+    stateSet->setMode( GL_DEPTH_TEST, osg::StateAttribute::ON );
+    mRoot->addChild(pathGeode);
 }
 
 

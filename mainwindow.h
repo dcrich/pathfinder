@@ -17,10 +17,12 @@ public:
   ~MainWindow();
 
 private slots:
-    void on_bGenerate_clicked();
+    void on_bHard_clicked();
     void on_bReset_clicked();
     void on_bRun_clicked();
     void on_bAutoRun_clicked();
+    void on_bMedium_clicked();
+    void on_bEasy_clicked();
 
 private:
   Ui::MainWindow *ui;

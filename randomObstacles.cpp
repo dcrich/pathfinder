@@ -2,26 +2,19 @@
 #include "randomObstacles.h"
 
 
-obstacleBoxes* randomObstacles::generate_random_obstacle(float mSizeGround, int numberofObstacles, float xGoal, float yGoal, float sizeGoal)
+obstacleBoxes* randomObstacles::generate_random_obstacle(float mSizeGround, int numberOfObstacles)
 {
-    goalX = xGoal;
-    goalY = yGoal;
-    goalSize = sizeGoal;
+    maxSize = mSizeGround;
 
-    std::random_device rd;
-    std::mt19937 generator(rd());
-    std::uniform_real_distribution<float> myDistribution(0,mSizeGround);
-
-    sizeX = myDistribution(generator)*.5f*(10.f/numberofObstacles);
-
-    sizeY = myDistribution(generator)*.5f*(10.f/numberofObstacles);
+    generate_random_size(sizeX, numberOfObstacles);
+    generate_random_size(sizeY, numberOfObstacles);
     sizeZ = 20.f;
 
-    x = myDistribution(generator);
-    y = myDistribution(generator);
+    generate_random_coordinate(x);
+    generate_random_coordinate(y);
     z = sizeZ*.5f;
-    check_if_in_boundary(x,sizeX,mSizeGround);
-    check_if_in_boundary(y,sizeY,mSizeGround);
+    check_if_in_boundary(x,sizeX,maxSize);
+    check_if_in_boundary(y,sizeY,maxSize);
 
     obstacleSize = {sizeX,sizeY,sizeZ};
     obstaclePosition = {x,y,z};
@@ -29,9 +22,32 @@ obstacleBoxes* randomObstacles::generate_random_obstacle(float mSizeGround, int 
     return mObstacleBox;
 }
 
+
+void randomObstacles::generate_random_size(float &dimensionOfInterest, int numberOfObstacles)
+{
+    float minSizeObstacle = .05f*maxSize;
+    float maxSizeOfObstacle = .2f*maxSize;
+    std::random_device rd;
+    std::mt19937 generator(rd());
+    std::uniform_real_distribution<float> myDistribution(minSizeObstacle,maxSizeOfObstacle);
+
+    dimensionOfInterest = myDistribution(generator);
+}
+
+
+void randomObstacles::generate_random_coordinate(float &coordinateOfInterest)
+{
+    std::random_device rd;
+    std::mt19937 generator(rd());
+    std::uniform_real_distribution<float> myDistribution(0,maxSize);
+
+    coordinateOfInterest = myDistribution(generator);
+}
+
+
 std::vector<float> randomObstacles::create_obstacle_area_matrix()
 {
-    float bufferValue{5};
+    float bufferValue{10};
     float xRangeLower = obstaclePosition[0] - obstacleSize[0]*0.5f - bufferValue;
     float yRangeLower = obstaclePosition[1] - obstacleSize[1]*0.5f - bufferValue;
     float xRangeUpper = obstaclePosition[0] + obstacleSize[0]*0.5f + bufferValue;
@@ -41,11 +57,11 @@ std::vector<float> randomObstacles::create_obstacle_area_matrix()
     return obstacleFootprint;
 }
 
-void check_if_in_boundary(float &position, float &size, float mSizeGround)
+void check_if_in_boundary(float &position, float &size, float maxSize)
 {
-    if (size*.5f + position >=mSizeGround)
+    if (size*.5f + position >=maxSize)
     {
-        position = mSizeGround - size*.5f;
+        position = maxSize - size*.5f;
         size = size * .75f;
     }
     if ( position - (.5f * size) <= 0)
@@ -53,14 +69,9 @@ void check_if_in_boundary(float &position, float &size, float mSizeGround)
         position = position + size * .5f;
         size = size * .75f;
     }
-    if (size*.5f + position >=mSizeGround)
+    if (size*.5f + position >=maxSize)
     {
-        position = mSizeGround - size*.5f;
+        position = maxSize - size*.5f;
         size = size * .75f;
     }
-}
-
-void check_if_blocking_goal(float &position, float &size, float xPos, float yPos)
-{
-
 }

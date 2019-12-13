@@ -14,43 +14,7 @@ SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 SET(CMAKE_AUTOMOC ON)
 SET(CMAKE_AUTOUIC ON)
 SET(CMAKE_AUTORCC ON)
-#SET(MYSOURCE
-#    main.cpp
-#    MainWindow.cpp
-#    MainWindow.h
-#    MainWindow.ui
-#    OSGWidget.h
-#    OSGWidget.cpp
-#    BouncyBall.h
-#    BouncyBall.cpp
-#    obstacleboxes.cpp
-#    obstacleboxes.h
-#    boundingbox.cpp
-#    boundingbox.h
-#    thevehicle.cpp
-#    thevehicle.h
-#    randomObstacles.cpp
-#    randomObstacles.h
-#    arenanodemap.cpp
-#    arenanodemap.h
-#    )
 
-#IF(BULLET_INCLUDE_DIR)
-#INCLUDE_DIRECTORIES(${BULLET_INCLUDE_DIR})
-#ENDIF()
-
-#add_executable(${PROJECT_NAME}
-#    ${MYSOURCE}
-#    ${MY_RES}
-#    )
-#target_link_libraries(${PROJECT_NAME}
-#    Qt5::Widgets
-#    Qt5::Gui
-#    Qt5::OpenGL
-#    ${OPENSCENEGRAPH_LIBRARIES}
-#    ${BULLET_LIBRARIES}
-#    )
-######################################
 IF (NOT TARGET gtest)
     # Prevent GoogleTest from overriding our compiler/linker options
     # when building with Visual Studio
@@ -84,8 +48,6 @@ add_library(physicsWorldStuff STATIC
     arenanodemap.h
     pathfinder.cpp
     pathfinder.h
-    mapnode.cpp
-    mapnode.h
     )
 target_link_libraries(physicsWorldStuff
     Qt5::Widgets

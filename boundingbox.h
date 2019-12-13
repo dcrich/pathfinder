@@ -13,7 +13,7 @@ public:
     osg::Node* getNode() {return mTransform.get();}
     void create_sides_xz(btVector3 positionPhysics);
     void create_sides_yz(btVector3 positionPhysics);
-
+    ~boundingBox();
 
 private:
     float mSize;
@@ -34,8 +34,6 @@ private:
     btVector3 sidePositionXZ1;
     btVector3 sidePositionXZ2;
     btVector3 bottomPosition;
-
-
 
     void create_sides_xy(btVector3 positionPhysics);
     void destroy();

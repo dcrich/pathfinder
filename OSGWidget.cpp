@@ -56,7 +56,8 @@ OSGWidget::OSGWidget( QWidget* parent,
 void OSGWidget::run_auto_path()
 {
     std::vector<std::vector<bool>> arenaStatusMap = newArenaMap->return_the_map();
-    pathFinder newPath(arenaStatusMap,static_cast<size_t>(mSizeGround),xStart,yStart,static_cast<size_t>(xGoalPosition),static_cast<size_t>(yGoalPosition));
+    pathFinder newPath(arenaStatusMap,static_cast<size_t>(mSizeGround),xStart,yStart,
+                       static_cast<size_t>(xGoalPosition),static_cast<size_t>(yGoalPosition));
     autoPath = newPath.return_path();
     while(!autoPath.empty())
     {
@@ -88,9 +89,6 @@ void OSGWidget::reveal_path()
 
 void OSGWidget::set_up_physics()
 {
-    // The BulletWidget owns and controls everything to do with
-    // the dynamics world. This call allocates the solvers
-    // and collision objects, and sets the gravity.
     mBroadphaseInterface = new btDbvtBroadphase();
     mDefaultCollisionConfig = new btDefaultCollisionConfiguration();
     mCollisionDispatcher = new btCollisionDispatcher(mDefaultCollisionConfig);
@@ -106,9 +104,9 @@ void OSGWidget::set_up_physics()
 void OSGWidget::setup_environment()
 {
     make_ground();
-    pos=QVector3D(500,7,18);
-    color =QVector4D(1,1,1,1);
-    mVehicle=new theVehicle(pos, color, 100, 10);
+    vehicleStartPosition=QVector3D(500,7,18);
+    vehicleColor =QVector4D(1,1,1,1);
+    mVehicle=new theVehicle(vehicleStartPosition, vehicleColor, 100, 10);
     mDynamicsWorld->addRigidBody(mVehicle->getRigidBodyPtr());
     mRoot->addChild(mVehicle->getTransform());
     mVehicle->getRigidBodyPtr()->setLinearVelocity(btVector3(1,10,20));
@@ -116,7 +114,7 @@ void OSGWidget::setup_environment()
 }
 
 
-void OSGWidget::make_balls()
+void OSGWidget::run_manual()
 {
     mVehicle->getRigidBodyPtr()->setLinearVelocity(btVector3(1,10,100));
     btVector3 currentVelcheck = mVehicle->getRigidBodyPtr()->getLinearVelocity();
@@ -130,7 +128,7 @@ void OSGWidget::create_obstacles(int numberOfObstacles)
     for (int i{0}; i<numberOfObstacles; i++)
     {
         randomObstacles newRandomObstacle;
-        mObstacleBox = newRandomObstacle.generate_random_obstacle(mSizeGround, numberOfObstacles, xGoalPosition,yGoalPosition,sizeGoal);
+        mObstacleBox = newRandomObstacle.generate_random_obstacle(mSizeGround, numberOfObstacles);
         mDynamicsWorld->addRigidBody(mObstacleBox->getRigidBodyPtr());
         mRoot->addChild(mObstacleBox->getNode());
         newArenaMap->add_to_obstacle_matrix(newRandomObstacle.create_obstacle_area_matrix());

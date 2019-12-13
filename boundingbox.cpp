@@ -11,23 +11,13 @@ boundingBox::boundingBox(float size, QVector4D& color)
     mSize=size;
     baseCenter=mSize*.5f;
     mColor=color;
-
     bottomPosition = {mSize*.5f,mSize*.5f,0};
     create_sides_xy(bottomPosition);
-
     create_mesh();
     make_boundary_box(mSize);
 }
 
-void boundingBox::create_sides_xy(btVector3 positionPhysics)
-{
-    //btVector3 positionPhysics{mSize*.5f,mSize*.5f,0};
-    mGroundShape = new btBoxShape(btVector3(mSize*.5f,mSize*.5f,mSize*.005f));
-    mGroundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),positionPhysics));
-    mRigidCI= new btRigidBody::btRigidBodyConstructionInfo(0,mGroundMotionState,mGroundShape,btVector3(0,0,0));
-    mRigidCI->m_restitution = 0.9f;
-    mRigidBody = new btRigidBody(*mRigidCI);
-}
+
 void boundingBox::create_mesh()
 {
     osg::Vec3 positionOSG{baseCenter, baseCenter, 0.f};
@@ -38,20 +28,47 @@ void boundingBox::create_mesh()
     geode = new osg::Geode;
     geode->addDrawable( sd );
 
-
     osg::StateSet* stateSet = geode->getOrCreateStateSet();
     osg::Material* material = new osg::Material;
-
     material->setColorMode( osg::Material::AMBIENT_AND_DIFFUSE );
-
     stateSet->setAttributeAndModes( material, osg::StateAttribute::ON );
     stateSet->setMode( GL_DEPTH_TEST, osg::StateAttribute::ON );
 
     mTransform = new osg::MatrixTransform;
-
     mTransform->addChild(geode);
 
 }
+
+
+void boundingBox::create_sides_xz( btVector3 positionPhysics)
+{
+    mGroundShape = new btBoxShape(btVector3(mSize*.5f,mSize*.005f,mSize*.5f));
+    mGroundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),positionPhysics));
+    mRigidCI= new btRigidBody::btRigidBodyConstructionInfo(0,mGroundMotionState,mGroundShape,btVector3(0,0,0));
+    mRigidCI->m_restitution = 0.9f;
+    mRigidBody = new btRigidBody(*mRigidCI);
+}
+
+
+void boundingBox::create_sides_yz( btVector3 positionPhysics)
+{
+    mGroundShape = new btBoxShape(btVector3(mSize*.005f,mSize*.5f,mSize*.5f));
+    mGroundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),positionPhysics));
+    mRigidCI= new btRigidBody::btRigidBodyConstructionInfo(0,mGroundMotionState,mGroundShape,btVector3(0,0,0));
+    mRigidCI->m_restitution = 0.9f;
+    mRigidBody = new btRigidBody(*mRigidCI);
+}
+
+
+void boundingBox::create_sides_xy(btVector3 positionPhysics)
+{
+    mGroundShape = new btBoxShape(btVector3(mSize*.5f,mSize*.5f,mSize*.005f));
+    mGroundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),positionPhysics));
+    mRigidCI= new btRigidBody::btRigidBodyConstructionInfo(0,mGroundMotionState,mGroundShape,btVector3(0,0,0));
+    mRigidCI->m_restitution = 0.9f;
+    mRigidBody = new btRigidBody(*mRigidCI);
+}
+
 
 void boundingBox::destroy()
 {
@@ -60,6 +77,13 @@ void boundingBox::destroy()
     delete mGroundShape;
     delete mGroundMotionState;
 }
+
+
+boundingBox::~boundingBox()
+{
+    destroy();
+}
+
 
 void boundingBox::make_boundary_box(float mSize)
 {
@@ -111,24 +135,6 @@ void boundingBox::make_boundary_box(float mSize)
 
     mstateSet->setAttributeAndModes( mmaterial, osg::StateAttribute::ON );
     mstateSet->setMode( GL_DEPTH_TEST, osg::StateAttribute::ON );
-}
-
-void boundingBox::create_sides_xz( btVector3 positionPhysics)
-{
-    mGroundShape = new btBoxShape(btVector3(mSize*.5f,mSize*.005f,mSize*.5f));
-    mGroundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),positionPhysics));
-    mRigidCI= new btRigidBody::btRigidBodyConstructionInfo(0,mGroundMotionState,mGroundShape,btVector3(0,0,0));
-    mRigidCI->m_restitution = 0.9f;
-    mRigidBody = new btRigidBody(*mRigidCI);
-}
-
-void boundingBox::create_sides_yz( btVector3 positionPhysics)
-{
-    mGroundShape = new btBoxShape(btVector3(mSize*.005f,mSize*.5f,mSize*.5f));
-    mGroundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),positionPhysics));
-    mRigidCI= new btRigidBody::btRigidBodyConstructionInfo(0,mGroundMotionState,mGroundShape,btVector3(0,0,0));
-    mRigidCI->m_restitution = 0.9f;
-    mRigidBody = new btRigidBody(*mRigidCI);
 }
 
 

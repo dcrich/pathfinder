@@ -27,7 +27,6 @@ public:
     std::queue<std::vector<size_t>> return_path();
 
 private:
-
     size_t sizeMap{1000};
     size_t startX{500};
     size_t startY{1};

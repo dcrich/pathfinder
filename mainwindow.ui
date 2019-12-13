@@ -43,26 +43,37 @@
          <item>
           <widget class="QLabel" name="label_2">
            <property name="text">
-            <string>Number of Obstacles(10-50)</string>
+            <string>Choose Your Difficulty</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="numObstacles">
-           <property name="minimum">
-            <number>10</number>
-           </property>
-           <property name="maximum">
-            <number>50</number>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="bGenerate">
-           <property name="text">
-            <string>Generate</string>
-           </property>
-          </widget>
+          <layout class="QGridLayout" name="gridLayout_11">
+           <item row="0" column="1">
+            <widget class="QPushButton" name="bMedium">
+             <property name="text">
+              <string>Medium</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QPushButton" name="bHard">
+             <property name="text">
+              <string>Hard</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QPushButton" name="bEasy">
+             <property name="text">
+              <string>Easy</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout">

@@ -10,6 +10,7 @@ arenaNodeMap::arenaNodeMap(size_t mArenaSize)
     add_fence_to_map();
 }
 
+
 void arenaNodeMap::find_path(size_t startPoint, size_t endPoint)
 {
     startPosition = startPoint;
@@ -34,6 +35,7 @@ void arenaNodeMap::add_to_obstacle_matrix(std::vector<float> obstacleFootprint)
     }
 }
 
+
 void arenaNodeMap::add_fence_to_map()
 {
     for (size_t i{0};i<mapSize;i++)
@@ -48,10 +50,12 @@ void arenaNodeMap::add_fence_to_map()
     }
 }
 
+
 std::vector<std::vector<bool>> arenaNodeMap::return_the_map()
 {
     return arenaStatusMap;
 }
+
 
 std::vector<float> check_footprint_bounds(std::vector<float> obstacleFootprint)
 {
@@ -71,6 +75,7 @@ std::vector<float> check_footprint_bounds(std::vector<float> obstacleFootprint)
     return obstacleFootprint;
 }
 
+
 void check_if_bounds_flipped(size_t &lowerBoundX,size_t &upperBoundX,size_t &lowerBoundY,size_t &upperBoundY)
 {
     if(lowerBoundX>upperBoundX)
@@ -86,6 +91,8 @@ void check_if_bounds_flipped(size_t &lowerBoundX,size_t &upperBoundX,size_t &low
         upperBoundY = tempVal;
     }
 }
+
+
 arenaNodeMap::~arenaNodeMap()
 {
 

@@ -76,7 +76,7 @@ void pathFinder::iterate_through_map()
         {
             closedList.push(openList.front());
             openList.pop();
-        }        
+        }
         counter++;
     }
 }
@@ -84,7 +84,7 @@ void pathFinder::iterate_through_map()
 
 void pathFinder::node_check(size_t i, size_t j)
 {
-    if (mapNodes[i][j].needToCheck)
+    if (!openList.empty() && mapNodes[i][j].needToCheck)
     {
         if(theObstacles[i][j] == false)
         {

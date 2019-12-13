@@ -16,6 +16,7 @@
 #include "boundingbox.h"
 #include "arenanodemap.h"
 #include "thevehicle.h"
+#include <queue>
 
 
 class OSGWidget : public QOpenGLWidget
@@ -35,7 +36,7 @@ public:
     void create_obstacles(int numberOfObstacles, int sizeOfObstacles);
     void make_ground();
     void arrow_key_velocity_update(int arrowDirection);
-    void check_arena_map();
+    void run_auto_path();
     void set_goal();
 
 protected:
@@ -93,10 +94,13 @@ private:
     btVector3 currentPosition;
     osg::Geode* goalGeode;
     osg::Box* goalBox;
+    size_t xStart{500};
+    size_t yStart{1};
     float sizeGoal{20};
     float xGoalPosition{0};
-    float yGoalPosition = mSizeGround;
+    float yGoalPosition = 999;
     bool winStatus{false};
+    std::queue<std::vector<size_t>> autoPath;
 
 
 

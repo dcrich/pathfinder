@@ -38,5 +38,5 @@ void MainWindow::on_bRun_clicked()
 
 void MainWindow::on_bAutoRun_clicked()
 {
-    ui->mOSGMainWidget->check_arena_map();
+    ui->mOSGMainWidget->run_auto_path();
 }

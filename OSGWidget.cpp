@@ -29,6 +29,7 @@
 #include "randomObstacles.h"
 
 #include <fstream>
+#include "pathfinder.h"
 
 
 
@@ -69,7 +70,7 @@ OSGWidget::OSGWidget( QWidget* parent,
     manipulator->setTrackerMode(osgGA::NodeTrackerManipulator::NODE_CENTER);
     manipulator->setTrackNode(mVehicle->getModel());
     mManipulator = manipulator;
-    view->setCameraManipulator( mManipulator ); 
+    view->setCameraManipulator( mManipulator );
     mViewer->addView( view );
     mViewer->setThreadingModel( osgViewer::CompositeViewer::SingleThreaded );
     mViewer->realize();
@@ -77,8 +78,8 @@ OSGWidget::OSGWidget( QWidget* parent,
     this->setFocusPolicy( Qt::StrongFocus );
     this->setMinimumSize( 400, 400 );
     this->setMouseTracking( false );
-    onHome();    
-    start_timer();      
+    onHome();
+    start_timer();
 }
 
 
@@ -87,25 +88,9 @@ OSGWidget::~OSGWidget()
 }
 
 
-void OSGWidget::check_arena_map()
+void OSGWidget::run_auto_path()
 {
 
-//    std::vector<float> checkBoxSize {1,1,100};
-//    std::vector<float> checkBoxPosition {0,0,0};
-//    std::vector<std::vector<int>> arenaStatusMap = newArenaMap->return_the_map();
-//    reset_world();
-//    for(size_t i{0}; i < mSizeGround; i++)
-//    {
-//        for(size_t j{0}; j < mSizeGround; j++)
-//        {
-//            if (arenaStatusMap[i][j] == 1)
-//            {
-//                checkBoxPosition = {static_cast<float>(i),static_cast<float>(j),0.f};
-//                obstacleBoxes checkBox(checkBoxSize,checkBoxPosition);
-//                mRoot->addChild(checkBox.getNode());
-//            }
-//        }
-//    }
 }
 
 
@@ -132,7 +117,7 @@ void OSGWidget::paintEvent( QPaintEvent* /* paintEvent */ )
     QPainter painter( this );
     painter.setRenderHint( QPainter::Antialiasing );
     this->paintGL();
-    painter.end();    
+    painter.end();
     this->doneCurrent();
 }
 
@@ -215,7 +200,7 @@ void OSGWidget::reset_world()
             
         }
         delete mDynamicsWorld;
-        mDynamicsWorld=nullptr;        
+        mDynamicsWorld=nullptr;
         delete mVehicle;
         mVehicle=nullptr;
         if (obstaclesCreated)
@@ -249,16 +234,20 @@ void OSGWidget::create_obstacles(int numberOfObstacles, int sizeOfObstacles)
         mRoot->addChild(mObstacleBox->getNode());
         newArenaMap->add_to_obstacle_matrix(newRandomObstacle.create_obstacle_area_matrix());
     }
-//    std::ofstream outputfile("arenaMap.txt");
-//    std::vector<std::vector<bool>> arenaStatusMap = newArenaMap->return_the_map();
-//    for(size_t i{0}; i < mSizeGround; i++)
-//    {
-//        for(size_t j{0}; j < mSizeGround; j++)
-//        {
-//            outputfile << arenaStatusMap[i][j]<<" ";
-//        }
-//        outputfile << "\n";
-//    }
+    std::vector<std::vector<bool>> arenaStatusMap = newArenaMap->return_the_map();
+    pathFinder newPath(arenaStatusMap,static_cast<size_t>(mSizeGround),xStart,yStart,static_cast<size_t>(xGoalPosition),static_cast<size_t>(yGoalPosition));
+    autoPath = newPath.return_path();
+
+    //    std::ofstream outputfile("arenaMap.txt");
+    //    std::vector<std::vector<bool>> arenaStatusMap = newArenaMap->return_the_map();
+    //    for(size_t i{0}; i < mSizeGround; i++)
+    //    {
+    //        for(size_t j{0}; j < mSizeGround; j++)
+    //        {
+    //            outputfile << arenaStatusMap[i][j]<<" ";
+    //        }
+    //        outputfile << "\n";
+    //    }
 }
 
 
@@ -272,7 +261,7 @@ void OSGWidget::paintGL()
         /* int numSimSteps = */
         mDynamicsWorld->stepSimulation(dt); //, 10, 0.01);
         mDynamicsWorld->updateAabbs();
-    }    
+    }
     mViewer->frame();
 }
 
@@ -280,7 +269,7 @@ void OSGWidget::paintGL()
 void OSGWidget::resizeGL( int width, int height )
 {
     this->getEventQueue()->windowResize( this->x(), this->y(), width, height );
-    mGraphicsWindow->resized( this->x(), this->y(), width, height );    
+    mGraphicsWindow->resized( this->x(), this->y(), width, height );
     this->on_resize( width, height );
 }
 
@@ -374,10 +363,10 @@ void OSGWidget::make_ground()
     mRoot->addChild(mGround->getNode());
     mDynamicsWorld->addRigidBody(mGround->getRigidBodyPtr());
 
-//    btVector3 sidePositionXZ2 = {mSizeGround*.5f,mSizeGround*1.005f,mSizeGround*.5f};
-//    mGround->create_sides_xz(sidePositionXZ2);
-//    mRoot->addChild(mGround->getNode());
-//    mDynamicsWorld->addRigidBody(mGround->getRigidBodyPtr());
+    //    btVector3 sidePositionXZ2 = {mSizeGround*.5f,mSizeGround*1.005f,mSizeGround*.5f};
+    //    mGround->create_sides_xz(sidePositionXZ2);
+    //    mRoot->addChild(mGround->getNode());
+    //    mDynamicsWorld->addRigidBody(mGround->getRigidBodyPtr());
 
     btVector3 sidePositionYZ1 = {-mSizeGround*.005f,mSizeGround*.5f,mSizeGround*.5f};
     mGround->create_sides_yz(sidePositionYZ1);
@@ -407,7 +396,7 @@ void OSGWidget::mousePressEvent( QMouseEvent* event )
 {
     // 1 = left mouse button
     // 2 = middle mouse button
-    // 3 = right mouse button  
+    // 3 = right mouse button
     unsigned int button = 0;
     switch( event->button() )
     {
@@ -429,7 +418,7 @@ void OSGWidget::mousePressEvent( QMouseEvent* event )
     auto pixelRatio = this->devicePixelRatio();
     this->getEventQueue()->mouseButtonPress( static_cast<float>( event->x() * pixelRatio ),
                                              static_cast<float>( event->y() * pixelRatio ),
-                                             button );  
+                                             button );
 }
 
 
@@ -437,23 +426,23 @@ void OSGWidget::mouseReleaseEvent(QMouseEvent* event)
 {
     // 1 = left mouse button
     // 2 = middle mouse button
-    // 3 = right mouse button    
-    unsigned int button = 0;    
+    // 3 = right mouse button
+    unsigned int button = 0;
     switch( event->button() )
     {
     case Qt::LeftButton:
         button = 1;
-        break;        
+        break;
     case Qt::MiddleButton:
         button = 2;
-        break;        
+        break;
     case Qt::RightButton:
         button = 3;
-        break;        
+        break;
     default:
         break;
-    }    
-    auto pixelRatio = this->devicePixelRatio();    
+    }
+    auto pixelRatio = this->devicePixelRatio();
     this->getEventQueue()->mouseButtonRelease( static_cast<float>( pixelRatio * event->x() ),
                                                static_cast<float>( pixelRatio * event->y() ),
                                                button );
@@ -463,16 +452,16 @@ void OSGWidget::mouseReleaseEvent(QMouseEvent* event)
 void OSGWidget::wheelEvent( QWheelEvent* event )
 {
     event->accept();
-    int delta = event->delta();  
+    int delta = event->delta();
     osgGA::GUIEventAdapter::ScrollingMotion motion = delta > 0 ?   osgGA::GUIEventAdapter::SCROLL_UP
-                                                                 : osgGA::GUIEventAdapter::SCROLL_DOWN;   
+                                                                 : osgGA::GUIEventAdapter::SCROLL_DOWN;
     this->getEventQueue()->mouseScroll( motion );
 }
 
 
 bool OSGWidget::event( QEvent* event )
 {
-    bool handled = QOpenGLWidget::event( event );    
+    bool handled = QOpenGLWidget::event( event );
     // This ensures that the OSG widget is always going to be repainted after the
     // user performed some interaction. Doing this in the event handler ensures
     // that we don't forget about some event and prevents duplicate code.
@@ -486,10 +475,10 @@ bool OSGWidget::event( QEvent* event )
     case QEvent::MouseMove:
     case QEvent::Wheel:
         this->update();
-        break;        
+        break;
     default:
         break;
-    }    
+    }
     return handled;
 }
 
@@ -497,7 +486,7 @@ bool OSGWidget::event( QEvent* event )
 void OSGWidget::onHome()
 {
     osgViewer::ViewerBase::Views views;
-    mViewer->getViews( views );    
+    mViewer->getViews( views );
     for( std::size_t i = 0; i < views.size(); i++ )
     {
         osgViewer::View* view = views.at(i);
@@ -509,15 +498,15 @@ void OSGWidget::onHome()
 void OSGWidget::on_resize( int width, int height )
 {
     std::vector<osg::Camera*> cameras;
-    mViewer->getCameras( cameras );    
-    auto pixelRatio = this->devicePixelRatio();    
+    mViewer->getCameras( cameras );
+    auto pixelRatio = this->devicePixelRatio();
     cameras[0]->setViewport( 0, 0, width * pixelRatio, height * pixelRatio );
 }
 
 
 osgGA::EventQueue* OSGWidget::getEventQueue() const
 {
-    osgGA::EventQueue* eventQueue = mGraphicsWindow->getEventQueue();    
+    osgGA::EventQueue* eventQueue = mGraphicsWindow->getEventQueue();
     if( eventQueue )
         return eventQueue;
     else

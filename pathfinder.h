@@ -3,14 +3,15 @@
 
 #include <iostream>
 #include <vector>
+#include <queue>
 
 struct Node
 {
+    size_t x;
+    size_t y;
     size_t parentX;
     size_t parentY;
     size_t distanceFromStart;
-    bool visited;
-    bool isObstacle;
     bool needToCheck;
 };
 
@@ -22,8 +23,12 @@ public:
     void find_the_shortest_path(std::vector<std::vector<bool>> &obstacleMap);
     void initialize_map(std::vector<std::vector<bool>> &obstacleMap);
     void iterate_through_map();
-    bool check_node(size_t &currentX,size_t &currentY);
-    void check_node_children(size_t &currentX,size_t &currentY);
+    void check_node_left();
+    void check_node_right();
+    void check_node_forward();
+    void node_check(size_t x, size_t y);
+    void check_if_goal();
+    std::queue<std::vector<size_t>> return_path();
 
 private:
 
@@ -32,7 +37,17 @@ private:
     size_t startY{1};
     size_t goalX{500};
     size_t goalY{1};
+    std::queue <Node> openList;
+    std::queue <Node> closedList;
+    bool lookingForGoal{true};
+    std::queue<std::vector<size_t>> thePath;
+
     std::vector<std::vector<Node>> mapNodes;
+    std::vector<std::vector<bool>> theObstacles;
+    int counter{0};
+    int checkNodeDirection{1};
+    size_t theParentX;
+    size_t theParentY;
 };
 
 #endif // PATHFINDER_H

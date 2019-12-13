@@ -14,7 +14,6 @@ void arenaNodeMap::find_path(size_t startPoint, size_t endPoint)
 {
     startPosition = startPoint;
     endPosition = endPoint;
-
 }
 
 

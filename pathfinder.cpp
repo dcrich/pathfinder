@@ -11,8 +11,6 @@ pathFinder::pathFinder(std::vector<std::vector<bool>> &obstacleMap, size_t mapSi
     startY = yStart;
     goalX = xGoal;
     goalY = yGoal;
-    initialize_map();
-    iterate_through_map();
 }
 
 
@@ -148,8 +146,14 @@ void pathFinder::check_if_goal()
 
 std::queue<std::vector<size_t>> pathFinder::return_path()
 {
-
+    initialize_map();
+    iterate_through_map();
     return thePath;
+}
+
+std::vector<std::vector<Node>> pathFinder::return_node_map()
+{
+    return mapNodes;
 }
 
 

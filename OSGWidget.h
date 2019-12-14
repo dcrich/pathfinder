@@ -102,6 +102,8 @@ private:
     float radiusVirtual{15};
     bool obstaclesCreated{false};
     bool winStatus{false};
+    bool gameStarted{false};
+    bool manualOn{false};
     bool mBusy;
 };
 

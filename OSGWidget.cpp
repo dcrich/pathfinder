@@ -66,8 +66,6 @@ void OSGWidget::run_auto_path()
     {
 
        autoCoordinates = autoPath.front();
-//       reveal_path();
-//       mVehicle->set_position(autoCoordinates);
        sphere_travel(counterIsPathPossible);
        autoPath.pop();
        counterIsPathPossible++;
@@ -133,6 +131,7 @@ void OSGWidget::run_manual()
 {
     mVehicle->getRigidBodyPtr()->setLinearVelocity(btVector3(1,5,100));
     btVector3 currentVelcheck = mVehicle->getRigidBodyPtr()->getLinearVelocity();
+    manualOn = true;
 }
 
 
@@ -140,6 +139,7 @@ void OSGWidget::create_obstacles(int numberOfObstacles)
 {
     set_goal();
     obstaclesCreated = true;
+    gameStarted = true;
     for (int i{0}; i<numberOfObstacles; i++)
     {
         randomObstacles newRandomObstacle;
@@ -247,6 +247,8 @@ void OSGWidget::reset_world()
     camera->setClearColor( osg::Vec4( 0.6f, 0.6f, 0.6f, 1.f ) );
     obstaclesCreated = false;
     winStatus = false;
+    gameStarted = false;
+    manualOn = false;
 }
 
 
@@ -257,7 +259,7 @@ void OSGWidget::timerEvent(QTimerEvent *)
     float currentPositionY = currentPosition.getY();
     float currentPositionZ = currentPosition.getZ();
 
-    if (winStatus == false && currentPositionY >yGoalPosition)
+    if (winStatus == false && currentPositionY >yGoalPosition && gameStarted)
     {
         mVehicle->getRigidBodyPtr()->setLinearVelocity(btVector3(0,0,1000));
         camera->setClearColor( osg::Vec4(0.949f,0.8157f,0.4196f,1.f));
@@ -321,27 +323,27 @@ void OSGWidget::set_camera_view()
 
 void OSGWidget::arrow_key_velocity_update(int arrowDirection)
 {
-    if (arrowDirection == 1)
+    if (arrowDirection == 1 && manualOn)
     {
         velocityIncrease = btVector3(0,30,0);
         mVehicle->set_velocity(velocityIncrease);
     }
-    if (arrowDirection == 2)
+    if (arrowDirection == 2 && manualOn)
     {
         velocityIncrease = btVector3(0,-30,0);
         mVehicle->set_velocity(velocityIncrease);
     }
-    if (arrowDirection == 3)
+    if (arrowDirection == 3 && manualOn)
     {
         velocityIncrease = btVector3(-30,0,0);
         mVehicle->set_velocity(velocityIncrease);
     }
-    if (arrowDirection == 4)
+    if (arrowDirection == 4 && manualOn)
     {
         velocityIncrease = btVector3(30,0,0);
         mVehicle->set_velocity(velocityIncrease);
     }
-    if (arrowDirection == 5)
+    if (arrowDirection == 5 && manualOn)
     {
         velocityIncrease = btVector3(0,0,100);
         mVehicle->set_velocity(velocityIncrease);

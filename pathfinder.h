@@ -25,6 +25,7 @@ public:
     void node_check(size_t x, size_t y);
     void check_if_goal();
     std::queue<std::vector<size_t>> return_path();
+    std::vector<std::vector<Node>> return_node_map();
 
 private:
     size_t sizeMap{1000};

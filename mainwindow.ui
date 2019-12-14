@@ -6,12 +6,22 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1111</width>
-    <height>846</height>
+    <width>1920</width>
+    <height>1080</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <family>Papyrus</family>
+    <pointsize>20</pointsize>
+   </font>
+  </property>
   <property name="windowTitle">
-   <string>Autonoballz</string>
+   <string>Time to Play Autonoballz!</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../../../Box/2019-2020-Capstone-35/Public Relations/team35LogoPneu.png</normaloff>../../../Box/2019-2020-Capstone-35/Public Relations/team35LogoPneu.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -226,8 +236,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1111</width>
-     <height>22</height>
+     <width>1920</width>
+     <height>36</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuInstructions">

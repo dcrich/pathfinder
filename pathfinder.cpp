@@ -148,6 +148,7 @@ void pathFinder::check_if_goal()
 
 std::queue<std::vector<size_t>> pathFinder::return_path()
 {
+
     return thePath;
 }
 

@@ -55,6 +55,7 @@ OSGWidget::OSGWidget( QWidget* parent,
 
 void OSGWidget::run_auto_path()
 {
+    mVehicle->getRigidBodyPtr()->setLinearVelocity(btVector3(0,0,0));
     std::vector<std::vector<bool>> arenaStatusMap = newArenaMap->return_the_map();
     pathFinder newPath(arenaStatusMap,static_cast<size_t>(mSizeGround),xStart,yStart,
                        static_cast<size_t>(xGoalPosition),static_cast<size_t>(yGoalPosition));
@@ -74,6 +75,10 @@ void OSGWidget::run_auto_path()
     if (counterIsPathPossible<10)
     {
         camera->setClearColor( osg::Vec4(.541f, 0.18f, 0.192f, 1.f) );
+    }
+    else
+    {
+        camera->setClearColor( osg::Vec4(0.949f,0.8157f,0.4196f,1.f));
     }
 }
 
